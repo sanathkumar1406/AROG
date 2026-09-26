@@ -20,6 +20,6 @@ services:
 # 2. Managed PostgreSQL Database
 databases:
   - name: arog-db
-    databaseName: AROG
-    user: postgres
+    databaseName: arog_db
+    user: arog_user
     plan: free
