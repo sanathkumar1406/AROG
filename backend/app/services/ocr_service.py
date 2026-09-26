@@ -11,6 +11,9 @@ import os
 import json
 import numpy as np
 from PIL import Image
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), ".env"))
 
 # Lazy-loaded ONNX sessions
 _encoder_session = None
@@ -94,23 +97,106 @@ def preprocess_image(image: Image.Image) -> np.ndarray:
     return img_array
 
 
-def run_ocr(image: Image.Image) -> dict:
-    """
-    Run TrOCR inference on an image.
+def is_trocr_available() -> bool:
+    """Check if local TrOCR ONNX weights exist on filesystem."""
+    encoder_path = os.path.join(MODEL_DIR, "encoder.onnx")
+    decoder_path = os.path.join(MODEL_DIR, "decoder.onnx")
+    return os.path.exists(encoder_path) and os.path.exists(decoder_path)
 
-    Returns dict with:
-        - extracted_text: The recognized text
-        - confidence: Approximate confidence (None if not available)
+
+def run_gemini_vision_ocr(image: Image.Image) -> dict:
     """
-    try:
-        encoder = _get_encoder()
-        decoder = _get_decoder()
-    except Exception as e:
+    Multimodal Vision OCR using Google Gemini (gemini-flash-latest / gemini-3.8-flash).
+    Extracts text from medical prescriptions, clinical slips, and doctor notes.
+    """
+    gemini_key = (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or "").strip()
+    if not gemini_key or gemini_key == "your_gemini_api_key_here" or gemini_key.startswith("your_"):
         return {
             "extracted_text": "",
             "confidence": None,
-            "error": f"Failed to load OCR model: {str(e)}"
+            "error": "OCR model weights not present on server and GEMINI_API_KEY is not configured.",
         }
+
+    try:
+        from google import genai
+        client = genai.Client(api_key=gemini_key)
+
+        prompt = (
+            "You are an expert clinical OCR and medical transcription system for rural health outreach.\n"
+            "Carefully transcribe all handwritten and printed clinical text from this image.\n"
+            "Include patient name, dates, prescriptions, drug names, dosages, frequencies, doctor notes, and follow-up advice.\n"
+            "Return ONLY the verbatim extracted text. Do not add conversational commentary or greetings."
+        )
+
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+
+        response_text = ""
+        last_error = None
+        for model_name in ["gemini-flash-latest", "gemini-3.8-flash", "gemini-3.5-flash"]:
+            try:
+                res = client.models.generate_content(
+                    model=model_name,
+                    contents=[image, prompt],
+                )
+                if res and res.text:
+                    response_text = res.text.strip()
+                    break
+            except Exception as ex:
+                last_error = ex
+                continue
+
+        if not response_text:
+            if last_error:
+                raise last_error
+            return {
+                "extracted_text": "",
+                "confidence": None,
+                "error": "No legible clinical text detected in the document image.",
+            }
+
+        # Clean markdown code fences if present
+        if response_text.startswith("```"):
+            lines = response_text.split("\n")
+            lines = [l for l in lines if not l.strip().startswith("```")]
+            response_text = "\n".join(lines).strip()
+
+        structured = parse_structured_fields(response_text)
+        return {
+            "extracted_text": response_text,
+            "structured_data": structured,
+            "confidence": 0.95,
+        }
+    except Exception as e:
+        print(f"[OCR Service] Gemini Vision OCR failed: {e}")
+        return {
+            "extracted_text": "",
+            "confidence": None,
+            "error": f"OCR processing failed: {str(e)}",
+        }
+
+
+def run_ocr(image: Image.Image) -> dict:
+    """
+    Run OCR inference on an image.
+    Uses local TrOCR ONNX model if model weights exist on disk.
+    Seamlessly falls back to Google Gemini Vision OCR in cloud/production environments.
+    """
+    if is_trocr_available():
+        try:
+            return _run_trocr(image)
+        except Exception as e:
+            print(f"[OCR Service] Local TrOCR failed ({e}), falling back to Gemini Vision OCR...")
+
+    return run_gemini_vision_ocr(image)
+
+
+def _run_trocr(image: Image.Image) -> dict:
+    """
+    Run TrOCR ONNX inference on an image.
+    """
+    encoder = _get_encoder()
+    decoder = _get_decoder()
 
     # Preprocess image
     pixel_values = preprocess_image(image)

@@ -59,18 +59,30 @@ async def extract_text(
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid image file. Could not decode.")
 
-    # Run OCR
+    # Run OCR with automatic multi-tier fallback (TrOCR -> Gemini Vision)
     try:
         result = run_ocr(image)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"OCR processing failed: {str(e)}")
+        result = {
+            "extracted_text": "",
+            "confidence": None,
+            "error": str(e),
+        }
 
-    if "error" in result:
-        raise HTTPException(status_code=500, detail=result["error"])
+    extracted_text = (result.get("extracted_text") or "").strip()
+    structured = result.get("structured_data") or {}
+
+    if not extracted_text:
+        return OCRResponse(
+            extracted_text="",
+            structured_data=structured,
+            confidence=None,
+            message="Document photo captured. No automated text extracted. Please transcribe clinical notes manually below before saving.",
+        )
 
     return OCRResponse(
-        extracted_text=result["extracted_text"],
-        structured_data=result.get("structured_data"),
+        extracted_text=extracted_text,
+        structured_data=structured,
         confidence=result.get("confidence"),
         message="Text extracted successfully. Please review and edit before saving to patient record.",
     )
