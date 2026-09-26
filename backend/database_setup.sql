@@ -96,7 +96,7 @@ INSERT INTO users (name, email, hashed_password)
 VALUES (
     'Dr. Julian M. Aris, MD',
     'doctor@arog.health',
-    '$2b$12$K1d0wz04eTjQh1O8X5Gkbe921e1h2u/4K.aZ.2ZpQxI8H7K3.gNyy'
+    '$2b$12$n/K4JjiZKOAqtuTJ7xngqeBsYmyyYV3Z5bAC6hy4peuOlSFInyFTq'
 ) ON CONFLICT (email) DO NOTHING;
 
 -- Seed Patients
