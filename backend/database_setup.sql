@@ -74,16 +74,22 @@ CREATE INDEX IF NOT EXISTS ix_ai_analyses_patient_id ON ai_analyses (patient_id)
 -- Table: field_visits (Geographic & Outreach Care Stations)
 CREATE TABLE IF NOT EXISTS field_visits (
     id SERIAL PRIMARY KEY,
+    patient_id INTEGER REFERENCES patients(id) ON DELETE SET NULL,
+    doctor_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    visit_id INTEGER REFERENCES visits(id) ON DELETE SET NULL,
     location VARCHAR(500) NOT NULL,
+    location_name VARCHAR(500),
     latitude DOUBLE PRECISION,
     longitude DOUBLE PRECISION,
     visit_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     notes TEXT,
     doctor_name VARCHAR(255),
     patients_seen INTEGER DEFAULT 0,
     new_patients INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX IF NOT EXISTS ix_field_visits_doctor_id ON field_visits (doctor_id);
 CREATE INDEX IF NOT EXISTS ix_field_visits_visit_date ON field_visits (visit_date);
 
 -- =====================================================================

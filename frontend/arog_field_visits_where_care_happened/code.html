@@ -739,8 +739,8 @@
         console.log('No Google Maps configuration or endpoint failed, using Leaflet fallback.');
       }
 
-      // Check if Google Maps API key is available
-      if (mapConfig && mapConfig.google_maps_api_key) {
+      // Check if Google Maps API key is available and has standard Google format (starts with AIza)
+      if (mapConfig && mapConfig.google_maps_api_key && mapConfig.google_maps_api_key.startsWith('AIza')) {
         try {
           // Listen for Google Maps authentication failure (e.g. invalid key or missing Maps JS API)
           window.gm_authFailure = function() {

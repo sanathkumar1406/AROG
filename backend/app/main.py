@@ -77,8 +77,9 @@ def get_maps_config(current_user: User = Depends(get_current_user)):
     from dotenv import load_dotenv
     load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"), override=True)
     maps_key = os.getenv("GOOGLE_MAPS_API_KEY", "").strip()
+    is_valid = maps_key.startswith("AIza") and len(maps_key) >= 30
     return {
-        "google_maps_api_key": maps_key if maps_key != "YOUR_KEY" and not maps_key.startswith("your_") else "",
+        "google_maps_api_key": maps_key if is_valid else "",
     }
 
 
