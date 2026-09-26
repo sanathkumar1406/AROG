@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="web_standard" name="shell-type" />
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <style>
+    @layer base {
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        overscroll-behavior: none;
+      }
+
+      main>:first-child {
+        margin-top: 0 !important;
+      }
+
+      main>:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Prevent protected content flash while authenticating (Requirement 9) */
+    body.auth-pending main,
+    body.auth-pending section,
+    body.auth-pending header,
+    body.auth-pending footer,
+    body.auth-pending aside {
+      display: none !important;
+    }
+  </style>
+  <script src="/frontend/api.js"></script>
+  <script>
+    // Requirement 9: Strict immediate check before DOM render to prevent data flash while logged out
+    if (!localStorage.getItem('arog_token')) {
+      window.location.replace('/frontend/arog_sign_in_clinical_portal/code.html');
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/frontend/qrcode.min.js"></script>
+  <script src="/frontend/html5-qrcode.min.js"></script>
+  <script
+    id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary-fixed-dim": "#bcc7dd", "secondary": "#545f72", "tertiary": "#52433c", "inverse-primary": "#ffb5a0", "primary-fixed-dim": "#ffb5a0", "surface-tint": "#8e4c39", "background": "#fff8f5", "surface-variant": "#e9e1dc", "surface": "#fff8f5", "outline": "#86736e", "on-error": "#ffffff", "outline-variant": "#d9c2bc", "on-tertiary": "#ffffff", "surface-dim": "#e1d8d4", "error": "#ba1a1a", "on-tertiary-container": "#e9d2c9", "tertiary-container": "#6a5a53", "on-surface-variant": "#53433f", "surface-bright": "#fff8f5", "on-secondary-fixed-variant": "#3c475a", "on-primary": "#ffffff", "primary-container": "#8d4b38", "primary": "#703423", "secondary-container": "#d5e0f7", "on-surface": "#1e1b18", "surface-container-low": "#fbf2ed", "primary-fixed": "#ffdbd1", "on-primary-fixed-variant": "#713524", "on-primary-container": "#ffcbbd", "error-container": "#ffdad6", "surface-container-highest": "#e9e1dc", "surface-container-lowest": "#ffffff", "tertiary-fixed": "#f5ded5", "on-tertiary-fixed": "#251914", "surface-container": "#f5ece7", "on-background": "#1e1b18", "surface-container-high": "#efe6e2", "secondary-fixed": "#d8e3fa", "inverse-on-surface": "#f8efea", "on-secondary-fixed": "#111c2c", "on-secondary": "#ffffff", "on-secondary-container": "#586377", "on-error-container": "#93000a", "tertiary-fixed-dim": "#d8c2b9", "on-tertiary-fixed-variant": "#53433d", "on-primary-fixed": "#390b01", "inverse-surface": "#34302c" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-mobile": "1rem", "margin": "3rem", "space-md": "1rem", "gutter": "1.5rem", "space-sm": "0.5rem", "margin-mobile": "1.25rem", "space-lg": "1.75rem", "space-xl": "2.75rem", "space-xs": "0.25rem" }, "fontFamily": { "annotation-md": ["Caveat"], "display-lg": ["Playfair Display"], "annotation-sm": ["Caveat"], "headline-md": ["Playfair Display"], "label-sm": ["Plus Jakarta Sans"], "display-lg-mobile": ["Playfair Display"], "body-lg": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-sm": ["Playfair Display"], "body-md": ["Plus Jakarta Sans"], "headline-lg": ["Playfair Display"] }, "fontSize": { "annotation-md": ["20px", { "lineHeight": "24px", "fontWeight": "500" }], "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }], "annotation-sm": ["16px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-md": ["26px", { "lineHeight": "34px", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500" }], "display-lg-mobile": ["34px", { "lineHeight": "42px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "title-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }], "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-sm": ["21px", { "lineHeight": "28px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" }] } } } };</script>
+</head>
+
+<body class="bg-surface text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed auth-pending">
+  <!-- Neutral Loading State (Requirement 9) -->
+  <div id="auth-checking-state" class="fixed inset-0 z-50 bg-surface flex flex-col items-center justify-center gap-3">
+    <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary shadow-xs">
+      <span class="material-symbols-outlined text-[24px] animate-spin">refresh</span>
+    </div>
+    <p class="font-body-md text-on-surface-variant font-medium">Checking authentication...</p>
+  </div>
+
+  <header class="fixed top-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(44,40,37,0.04)]">
+    <div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
+      <div class="flex items-center gap-4"><img alt="AROG Brand Logo" class="h-8 w-auto object-contain"
+          src="https://lh3.googleusercontent.com/aida/AEtjO1U52zKU-MZXsGgsqmuhWxEkTatrrqtmtmJuq4FvJ-oQKCunO5xnc5egcngEbP-wMzDa8LHQLCvnfCmaxSWJoCtsWsUYtnctm0WTfnB5-fV3illv9R6m3n7lI15ivGQ4HObxgrMZi7DgzNezoD8cs-EvquLu444iGOxsZ2NHQWz-P9JPZJ-dJScS4f2gtJvoOHpuvUtOpQZS1fUcAc8iWMpopHRXJ5q9E_21o3JpXiYQwQiDZ91-buc3qSE" /><span
+          class="hidden sm:inline-block font-annotation-sm text-annotation-sm text-secondary tracking-wide border-l border-outline-variant/40 pl-3 italic">Continuity
+          Ledger</span></div>
+      <div class="flex items-center gap-6 lg:gap-8">
+        <nav class="hidden md:flex items-center gap-7"><a
+            class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors tracking-wide"
+            data-path="home" href="/frontend/arog_healthcare_continuity_home/code.html">Home</a><a aria-current="page"
+            class="font-label-lg text-label-lg text-primary font-semibold border-b border-primary pb-0.5 tracking-wide"
+            data-path="patients" href="/frontend/arog_patients_continuity_records/code.html">Patients</a><a
+            class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors tracking-wide"
+            data-path="timeline" href="/frontend/arog_field_visits_where_care_happened/code.html">Field Visits</a></nav>
+        <div class="flex items-center gap-4 pl-3 sm:border-l sm:border-outline-variant/40"><a
+            class="px-4 py-1.5 rounded-full font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface bg-surface-container-high/60 hover:bg-surface-container-high transition-all"
+            data-path="sign-in" href="#">Sign In</a>
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span
+              class="material-symbols-outlined text-on-primary text-[18px]">person</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="w-full pt-20 bg-surface min-h-[calc(100vh-14rem)]">
+    <div class="flex flex-col w-full">
+      <!-- Top Archival Banner & Section Intro -->
+      <section class="max-w-7xl mx-auto w-full px-6 lg:px-12 pt-8 pb-6">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8">
+          <div class="space-y-2 max-w-2xl">
+            <div class="flex items-center gap-3">
+              <span class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-semibold">Shared
+                Clinical Registry</span>
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+              <span class="font-annotation-sm text-annotation-sm text-tertiary italic">Cross-network continuity
+                ledger</span>
+            </div>
+            <h1 class="font-display-lg text-display-lg text-on-surface tracking-tight">FIND A PATIENT</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant">
+              One Health ID. One continuous story, wherever care happens.
+            </p>
+          </div>
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-wrap items-center gap-3">
+            <button
+              class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-primary text-on-primary hover:bg-primary-container transition-all shadow-sm"
+              id="open-scan-modal">
+              <span class="material-symbols-outlined text-[19px]">qr_code_scanner</span>
+              <span class="font-label-lg text-label-lg">Scan Health ID QR</span>
+            </button>
+            <button
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container transition-all"
+              id="focus-search-btn">
+              <span class="material-symbols-outlined text-[19px] text-tertiary">keyboard</span>
+              <span class="font-label-lg text-label-lg">Enter Health ID</span>
+            </button>
+            <button
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-surface-container-high/60 text-primary hover:bg-surface-container-high transition-all"
+              id="open-register-modal">
+              <span class="material-symbols-outlined text-[19px]">person_add</span>
+              <span class="font-label-lg text-label-lg">Register New Patient</span>
+            </button>
+          </div>
+        </div>
+        <!-- Editorial Search & Rapid Card Scanner Bar -->
+        <div
+          class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch bg-surface-container-low p-3 sm:p-4 rounded-xl shadow-[0_2px_14px_rgba(44,40,37,0.03)]">
+          <div class="lg:col-span-8 flex items-center bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm">
+            <span class="material-symbols-outlined text-outline text-[22px] mr-3">search</span>
+            <input
+              class="w-full bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none"
+              id="patient-search-input"
+              placeholder="Lookup by Patient Name, Health ID (e.g. HC-20481), or Phone number..." type="text" />
+            <div class="hidden sm:flex items-center gap-2 pl-3">
+              <span class="text-xs px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono">⌘K</span>
+            </div>
+          </div>
+          <!-- Quick Finder Callout -->
+          <div class="lg:col-span-4 flex items-center justify-between bg-surface-container px-4 py-2.5 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-9 h-9 rounded-full bg-surface-container-lowest flex items-center justify-center text-primary shadow-xs">
+                <span class="material-symbols-outlined text-[20px]">document_scanner</span>
+              </div>
+              <div>
+                <p class="font-label-lg text-label-lg text-on-surface leading-tight">Patient Card Reader</p>
+                <p class="font-annotation-sm text-annotation-sm text-tertiary">Instant lookup from physical card or
+                  phone</p>
+              </div>
+            </div>
+            <button class="p-1.5 rounded-full hover:bg-surface-container-high text-primary transition-colors"
+              id="camera-scan-trigger" title="Scan card visually">
+              <span class="material-symbols-outlined text-[20px]">photo_camera</span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- Split Interface Layout (Master-Detail Folio) -->
+      <section class="max-w-7xl mx-auto w-full px-6 lg:px-12 pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Column (1/3 width): Local Registry / Recently Consulted -->
+          <aside class="lg:col-span-4 space-y-4">
+            <div class="flex items-center justify-between pb-2">
+              <div>
+                <h2 class="font-headline-sm text-headline-sm text-on-surface">Recently Consulted</h2>
+                <p class="font-annotation-sm text-annotation-sm text-tertiary mt-0.5">Shared registry across visiting
+                  health networks</p>
+              </div>
+              <span id="patients-count-badge" class="text-xs font-mono px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant">Active</span>
+            </div>
+            <!-- Registry Cards List -->
+            <div class="space-y-3.5" id="patient-list">
+              <div
+                class="p-8 text-center rounded-xl bg-surface-container-low text-on-surface-variant flex flex-col items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[28px] animate-spin">refresh</span>
+                <p class="font-body-md text-sm">Loading recent patients ledger...</p>
+              </div>
+            </div>
+            <!-- Archival Ledger Note -->
+            <div class="p-4 rounded-xl bg-surface-container-high/40 flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">auto_stories</span>
+              <div>
+                <p class="font-label-lg text-label-lg text-on-surface">Physician Continuity Note</p>
+                <p class="font-annotation-sm text-annotation-sm text-tertiary mt-0.5">
+                  Entries here reflect cross-organizational consultations recorded in offline caches and synced over
+                  mesh radios.
+                </p>
+              </div>
+            </div>
+          </aside>
+          <!-- Right Column (2/3 width): Selected Patient Continuous Folio (Ravi Kumar Focus) -->
+          <main class="lg:col-span-8 space-y-6">
+            <!-- Empty State: No Patient Selected (Requirement 9) -->
+            <div id="patient-empty-state"
+              class="p-10 sm:p-14 rounded-2xl bg-surface-container-lowest shadow-[0_4px_24px_rgba(44,40,37,0.05)] border border-outline-variant/40 text-center flex flex-col items-center justify-center min-h-[500px]">
+              <div
+                class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-primary mb-4 shadow-inner">
+                <span class="material-symbols-outlined text-[32px]">folder_shared</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2 font-serif">Select a Patient to View
+                Their Records</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant max-w-md mb-6 font-light">
+                Choose a patient from the recently consulted ledger on the left, or use the search bar or QR scanner to
+                inspect their continuity folio.
+              </p>
+              <div class="flex flex-wrap items-center justify-center gap-3">
+                <button type="button"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container hover:bg-surface-container-high text-primary font-label-lg text-label-lg transition-colors cursor-pointer"
+                  onclick="document.getElementById('patient-search-input').focus()">
+                  <span class="material-symbols-outlined text-[18px]">search</span>
+                  <span>Search Registry</span>
+                </button>
+                <button type="button"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container transition-colors shadow-xs cursor-pointer"
+                  onclick="document.getElementById('open-scan-modal').click()">
+                  <span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+                  <span>Scan Health ID QR</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Column: Active Patient Continuous Folio (Hidden until patient selected) -->
+            <div id="patient-details-folio" class="space-y-6 hidden">
+              <!-- Patient Header Folio Card -->
+              <div
+                class="p-6 sm:p-8 rounded-xl bg-surface-container-lowest shadow-[0_6px_24px_rgba(44,40,37,0.05)] relative overflow-hidden">
+                <!-- Archival Stamp Background Graphic -->
+                <div class="absolute right-4 -bottom-6 w-32 h-32 opacity-15 pointer-events-none">
+                  <img alt="Archival Health Passport Seal" class="w-full h-full object-contain"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuANTNvPuwk5TGezOGDdBwUTcqUce39a9WNPE1w9yiwhBhGlDjv4XcgLkn1l43Nj_DLQB2J12GwOz3hJqODF7mGhK-pvazKxVozisysDiVc83Y4hMCtq3hJm9Z2z9ltfTeZtYfLn3dTcWOwfVRL_kqArfsqXEBYdnH9r_IqDPnyrdf1vb_OXjYDEHS1SA0aJ2xboeDrbFsekqABSnF5FwTf00RGW3oPfhKIcx-Cz9aZR2IvIzGctkIav" />
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-6 relative z-10">
+                  <div class="flex items-start gap-4">
+                    <!-- Passport photo placeholder / Monogram Folio -->
+                    <div id="patient-monogram"
+                      class="w-16 h-16 rounded-xl bg-surface-container flex flex-col items-center justify-center text-primary font-display-lg text-headline-sm shadow-xs shrink-0">
+                      -
+                    </div>
+                    <div class="space-y-1">
+                      <div class="flex flex-wrap items-center gap-3">
+                        <h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight"
+                          id="patient-name-view">Patient Folio</h2>
+                        <span id="patient-status-badge"
+                          class="px-3 py-0.5 rounded-full text-xs font-medium bg-primary-fixed text-on-primary-fixed">
+                          Continuous Ledger Active
+                        </span>
+                      </div>
+                      <div id="patient-meta-text"
+                        class="flex flex-wrap items-center gap-3 text-sm text-on-surface-variant font-label-lg">
+                      </div>
+                      <div class="pt-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[16px] text-tertiary">verified_user</span>
+                        <p class="font-annotation-sm text-annotation-sm text-tertiary">
+                          Patient-owned record · Shared across visiting clinics
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Authentic Scannable Health ID QR -->
+                  <div
+                    class="flex flex-col items-center justify-center p-3 rounded-lg bg-surface-container-low shrink-0 self-start shadow-xs">
+                    <div id="patient-qr-container"
+                      class="w-20 h-20 bg-surface-container-lowest p-1 rounded flex items-center justify-center border border-outline-variant/40">
+                    </div>
+                    <span id="patient-qr-caption"
+                      class="text-[10px] font-mono uppercase tracking-wider text-outline mt-1.5 font-bold"></span>
+                  </div>
+                </div>
+                <!-- Action Toolbar -->
+                <div class="mt-6 pt-5 flex flex-wrap items-center justify-between gap-3">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <button
+                      class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-all cursor-pointer shadow-xs"
+                      id="trigger-ai-summary" title="Click to run AI synthesis of records">
+                      <span class="material-symbols-outlined text-[17px] text-primary">auto_awesome</span>
+                      <span class="font-label-lg text-label-lg font-semibold">Analyze Patient</span>
+                    </button>
+
+                    <button
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-all"
+                      onclick="document.getElementById('timeline-section').scrollIntoView({behavior:'smooth'})">
+                      <span class="material-symbols-outlined text-[17px]">history</span>
+                      <span class="font-label-lg text-label-lg">View Timeline</span>
+                    </button>
+                    <button
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-error-container/70 text-on-error-container hover:bg-error-container transition-all">
+                      <span class="material-symbols-outlined text-[17px]">gpp_maybe</span>
+                      <span class="font-label-lg text-label-lg">CARE Check (Active Notice)</span>
+                    </button>
+                    <button
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-all"
+                      id="view-passport-btn">
+                      <span class="material-symbols-outlined text-[17px]">badge</span>
+                      <span class="font-label-lg text-label-lg">View Health ID</span>
+                    </button>
+                  </div>
+                  <button
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-on-primary hover:bg-primary-container transition-all shadow-xs"
+                    id="open-add-visit-btn">
+                    <span class="material-symbols-outlined text-[18px]">post_add</span>
+                    <span class="font-label-lg text-label-lg">＋ Add Visit</span>
+                  </button>
+                </div>
+              </div>
+              <!-- AI Continuity Summary Box (Warm Parchment Highlighting) -->
+              <div class="p-6 rounded-xl bg-surface-container-low relative shadow-[0_2px_12px_rgba(44,40,37,0.03)]"
+                id="ai-summary-box">
+                <div class="flex items-start justify-between gap-4 mb-3">
+                  <div class="flex items-center gap-2.5">
+                    <span class="material-symbols-outlined text-primary text-[22px]">history_toggle_off</span>
+                    <h3 class="font-title-md text-title-md text-on-surface">Synthesis Across Visiting Network</h3>
+                  </div>
+                  <span id="ai-summary-badge" class="font-annotation-sm text-annotation-sm text-primary italic">
+                    AI Continuity Summary
+                  </span>
+                </div>
+                <p id="ai-summary-text" class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+                  Loading patient continuity records...
+                </p>
+                <!-- Missing info alerts -->
+                <div id="ai-missing-info-list"
+                  class="mt-4 pt-3 flex flex-wrap items-center gap-4 text-xs text-on-surface-variant">
+                </div>
+                <!-- Contradiction alerts -->
+                <div id="ai-contradictions-box"
+                  class="mt-3 p-3.5 rounded-lg bg-error-container/40 text-on-error-container text-xs hidden flex items-start gap-2.5 border border-error/20">
+                  <span class="material-symbols-outlined text-[18px] text-error shrink-0 mt-0.5">warning</span>
+                  <div id="ai-contradictions-content" class="space-y-1"></div>
+                </div>
+              </div>
+              <!-- Multi-Clinician Visit Continuity Parchment -->
+              <div class="p-6 sm:p-8 rounded-xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(44,40,37,0.04)]"
+                id="timeline-section">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 gap-3">
+                  <div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface">Multi-Clinician Visit Continuity
+                      Parchment</h3>
+                    <p class="font-body-md text-body-md text-on-surface-variant">The chronological narrative recorded by
+                      traveling doctors.</p>
+                  </div>
+                  <!-- Margin Note Header -->
+                  <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container text-xs font-annotation-sm text-tertiary">
+                    <span>Different doctors · Different locations · One story</span>
+                  </div>
+                </div>
+                <!-- Timeline Steps Container -->
+                <div id="timeline-visits-container"
+                  class="relative pl-6 sm:pl-8 space-y-8 before:content-[''] before:absolute before:left-3 before:top-3 before:bottom-3 before:w-0.5 before:bg-outline-variant/60">
+                  <div class="p-6 rounded-lg bg-surface-container-low text-center">
+                    <p class="font-body-md text-sm text-on-surface-variant">Select a patient to inspect their chronological timeline.</p>
+                  </div>
+                </div>
+              </div>
+              <!-- Record Overview Tiles / Continuity Matrix -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Tile 1: Active Medicines -->
+                <div
+                  class="p-5 rounded-xl bg-surface-container-lowest shadow-[0_2px_12px_rgba(44,40,37,0.03)] space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span
+                      class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">Medicines</span>
+                    <span class="material-symbols-outlined text-outline text-[18px]">pill</span>
+                  </div>
+                  <div id="active-medicines-container" class="space-y-2">
+                    <p class="text-xs text-on-surface-variant p-2">Select a patient to view documented medicines.</p>
+                  </div>
+                  <p class="font-annotation-sm text-annotation-sm text-tertiary">Active prescriptions</p>
+                </div>
+                <!-- Tile 2: Allergies & Reactions -->
+                <div
+                  class="p-5 rounded-xl bg-surface-container-lowest shadow-[0_2px_12px_rgba(44,40,37,0.03)] space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span
+                      class="font-label-sm text-label-sm uppercase tracking-wider text-error font-semibold">Allergies
+                      &amp; Risks</span>
+                    <span class="material-symbols-outlined text-error text-[18px]">emergency</span>
+                  </div>
+                  <div id="allergies-risks-container" class="space-y-2">
+                    <div class="p-2.5 rounded-lg bg-surface-container-low">
+                      <p class="text-xs text-on-surface-variant">Select a patient to view documented reactions and risks.</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- Tile 3: CARE Check Status -->
+                <div
+                  class="p-5 rounded-xl bg-surface-container-lowest shadow-[0_2px_12px_rgba(44,40,37,0.03)] space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-label-sm text-label-sm uppercase tracking-wider text-tertiary font-semibold">CARE
+                      Check Safety</span>
+                    <span class="material-symbols-outlined text-tertiary text-[18px]">security</span>
+                  </div>
+                  <div class="p-3 rounded-lg bg-surface-container-high/60 space-y-2">
+                    <div class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-primary text-[18px]">rule</span>
+                      <span class="font-label-lg text-label-lg text-on-surface">Continuity Verification</span>
+                    </div>
+                    <p class="text-xs text-on-surface-variant">
+                      Review clinical encounters, prescriptions, and allergy notes across travelling circuits.
+                    </p>
+                  </div>
+                  <button
+                    class="w-full text-center py-1.5 rounded-md text-xs font-label-lg text-primary hover:bg-surface-container transition-colors">
+                    Execute Pre-Prescription Check →
+                  </button>
+                </div>
+              </div>
+            </div><!-- end #patient-details-folio -->
+          </main>
+        </div>
+      </section>
+      <!-- MODAL 1: Add Visit Drawer Overlay (Hidden by default, triggered by CTA) -->
+      <div
+        class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-xs flex items-center justify-end hidden opacity-0 transition-opacity duration-300"
+        id="add-visit-modal">
+        <div
+          class="w-full max-w-xl h-full bg-surface-container-lowest shadow-2xl p-6 sm:p-8 flex flex-col justify-between overflow-y-auto transform translate-x-full transition-transform duration-300"
+          id="add-visit-panel">
+          <div class="space-y-6">
+            <!-- Drawer Header -->
+            <div class="flex items-start justify-between pb-4 border-b border-outline-variant/30">
+              <div>
+                <span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">New
+                  Continuous Entry</span>
+                <h3 class="font-headline-md text-headline-md text-on-surface">Append to Patient Folio</h3>
+                <p id="drawer-patient-sub" class="font-annotation-sm text-annotation-sm text-tertiary">Patient: Ravi
+                  Kumar (HC-20481)</p>
+              </div>
+              <button class="p-2 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors"
+                id="close-add-visit-btn">
+                <span class="material-symbols-outlined text-[22px]">close</span>
+              </button>
+            </div>
+            <!-- Form Elements -->
+            <form class="space-y-4" onsubmit="event.preventDefault();">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block font-label-lg text-label-lg text-on-surface mb-1">Visit Date</label>
+                  <input id="visit-date-input"
+                    class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                    type="date" value="2026-08-24" />
+                </div>
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="block font-label-lg text-label-lg text-on-surface">Attending Provider</label>
+                    <span class="font-annotation-sm text-xs text-primary font-medium">From Profile (Locked)</span>
+                  </div>
+                  <input id="visit-doctor-input"
+                    class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container font-body-md text-body-md text-on-surface cursor-not-allowed border border-outline-variant/50"
+                    type="text" readonly value="Dr. Julian M. Aris, MD" />
+                </div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="block font-label-lg text-label-lg text-on-surface">Clinical Location / Mobile
+                    Outpost</label>
+                  <button type="button" id="btn-detect-gps"
+                    class="text-xs text-primary font-label-sm inline-flex items-center gap-1 hover:underline cursor-pointer">
+                    <span class="material-symbols-outlined text-[15px]">my_location</span>
+                    <span id="gps-status-badge">Detect GPS</span>
+                  </button>
+                </div>
+                <input id="visit-location-input"
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="e.g. Warangal Outpost, Hyderabad Clinic" type="text" value="" />
+                <div class="mt-1 flex items-center justify-between text-[11px] text-tertiary">
+                  <span id="gps-coords-display" class="font-mono">Coordinates: Click 'Detect GPS' to capture
+                    location</span>
+                  <span class="italic">Saved to PostgreSQL</span>
+                </div>
+                <input type="hidden" id="visit-lat-input" value="" />
+                <input type="hidden" id="visit-lng-input" value="" />
+              </div>
+              <div>
+                <label class="block font-label-lg text-label-lg text-on-surface mb-1">Reason for Visit / Chief
+                  Complaint</label>
+                <input id="visit-complaint-input"
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="e.g. Follow-up hypertension titration, agricultural dust rash" type="text" />
+              </div>
+              <div>
+                <label class="block font-label-lg text-label-lg text-on-surface mb-1">Prescribed Medicines &amp;
+                  Dosages</label>
+                <textarea id="visit-medicines-input"
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="List medications with schedule, e.g. Metformin 500mg OD..." rows="2"></textarea>
+              </div>
+              <div>
+                <label class="block font-label-lg text-label-lg text-on-surface mb-1">Adverse Reactions Observed</label>
+                <input id="visit-reactions-input"
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="None observed or note allergic sensitivity..." type="text" />
+              </div>
+              <div>
+                <label class="block font-label-lg text-label-lg text-on-surface mb-1">Follow-Up / Next Steps</label>
+                <input id="visit-followup-input"
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="e.g. Renal panel check in 6 weeks, review in South Outpost" type="text" />
+              </div>
+              <!-- TrOCR Document Scanner Section (Requirements 17, 18, 19) -->
+              <div class="p-3.5 rounded-xl bg-surface-container-low border border-dashed border-primary/40 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[19px] text-primary">document_scanner</span>
+                    <label class="font-label-lg text-label-lg text-on-surface font-semibold">Upload Document</label>
+                  </div>
+                  <span class="font-annotation-sm text-annotation-sm text-primary">TrOCR Model</span>
+                </div>
+                <p class="font-label-sm text-xs text-on-surface-variant">
+                  Extract information from prescriptions or medical slips into structured fields. Review and edit before saving.
+                </p>
+
+                <!-- Two options: Upload Document & Use Camera (Requirement 18) -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <input type="file" id="ocr-doc-input" accept="image/*" class="hidden" />
+                  <button type="button" id="btn-ocr-upload-doc"
+                    class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-primary hover:bg-surface-container border border-outline-variant/60 font-label-lg text-xs flex items-center gap-1.5 transition-all shadow-xs cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">upload_file</span>
+                    <span>Upload Document</span>
+                  </button>
+                  <button type="button" id="btn-ocr-use-camera"
+                    class="px-3.5 py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed hover:bg-primary-fixed-dim font-label-lg text-xs flex items-center gap-1.5 transition-all shadow-xs cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">photo_camera</span>
+                    <span>Use Camera</span>
+                  </button>
+                  <span id="ocr-status-text" class="font-label-sm text-xs text-secondary italic">No document chosen</span>
+                </div>
+
+                <!-- Camera Stream Viewfinder Container (Hidden by default) -->
+                <div id="ocr-camera-container" class="hidden space-y-2 p-2.5 rounded-lg bg-surface-container border border-outline-variant/40">
+                  <div class="relative rounded-lg overflow-hidden bg-black flex items-center justify-center min-h-[180px]">
+                    <video id="ocr-camera-video" autoplay playsinline class="w-full h-48 object-cover"></video>
+                    <canvas id="ocr-camera-canvas" class="hidden"></canvas>
+                  </div>
+                  <div class="flex items-center justify-between gap-2 pt-1">
+                    <button type="button" id="btn-ocr-capture-photo" class="px-4 py-1.5 rounded-full bg-primary text-on-primary font-label-lg text-xs flex items-center gap-1.5 hover:bg-primary-container shadow-xs cursor-pointer">
+                      <span class="material-symbols-outlined text-[15px]">camera</span>
+                      <span>Capture Photo</span>
+                    </button>
+                    <button type="button" id="btn-ocr-cancel-camera" class="px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface font-label-lg text-xs hover:bg-surface-container-highest cursor-pointer">
+                      Cancel
+                    </button>
+                  </div>
+                  <p id="ocr-camera-msg" class="text-xs text-secondary font-annotation-sm"></p>
+                </div>
+
+                <!-- Photo Preview Container (After capture) -->
+                <div id="ocr-photo-preview-container" class="hidden space-y-2 p-2.5 rounded-lg bg-surface-container border border-outline-variant/40">
+                  <p class="text-xs font-semibold text-primary">Captured Document Preview:</p>
+                  <img id="ocr-captured-preview-img" class="w-full max-h-48 object-contain rounded-lg border border-outline-variant/60 bg-surface-container-lowest" />
+                  <div class="flex items-center justify-between gap-2 pt-1">
+                    <button type="button" id="btn-ocr-use-photo" class="px-4 py-1.5 rounded-full bg-primary text-on-primary font-label-lg text-xs flex items-center gap-1.5 hover:bg-primary-container shadow-xs cursor-pointer">
+                      <span class="material-symbols-outlined text-[15px]">check</span>
+                      <span>Use Photo (Run OCR)</span>
+                    </button>
+                    <button type="button" id="btn-ocr-retake-photo" class="px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface font-label-lg text-xs hover:bg-surface-container-highest cursor-pointer">
+                      Retake
+                    </button>
+                  </div>
+                </div>
+
+                <!-- OCR Review & Structured Editable Fields (Requirement 19) -->
+                <div id="ocr-preview-box" class="hidden space-y-2.5 pt-1 p-3 rounded-lg bg-surface-container-lowest border border-primary/30 shadow-xs">
+                  <div class="flex items-center justify-between border-b border-outline-variant/30 pb-1.5">
+                    <span class="font-label-lg text-xs font-semibold text-primary flex items-center gap-1.5">
+                      <span class="material-symbols-outlined text-[16px]">edit_note</span>
+                      <span>Review Extracted Fields (Before Saving)</span>
+                    </span>
+                    <button type="button" id="btn-populate-visit-form"
+                      class="px-2.5 py-1 rounded-full bg-primary text-on-primary text-[11px] font-label-lg flex items-center gap-1 hover:bg-primary-container shadow-xs cursor-pointer">
+                      <span class="material-symbols-outlined text-[13px]">arrow_downward</span>
+                      <span>Populate Visit Form</span>
+                    </button>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <label class="block font-medium text-on-surface-variant mb-0.5">Extracted Date:</label>
+                      <input id="ocr-edit-date" type="text" class="w-full px-2.5 py-1.5 rounded bg-surface-container-low border border-outline-variant/40 text-on-surface text-xs focus:ring-1 focus:ring-primary focus:outline-none" placeholder="e.g. 20 Sep 2026" />
+                    </div>
+                    <div>
+                      <label class="block font-medium text-on-surface-variant mb-0.5">Medicine & Dosage:</label>
+                      <input id="ocr-edit-medicine" type="text" class="w-full px-2.5 py-1.5 rounded bg-surface-container-low border border-outline-variant/40 text-on-surface text-xs focus:ring-1 focus:ring-primary focus:outline-none" placeholder="e.g. Amlodipine 5 mg" />
+                    </div>
+                  </div>
+
+                  <div class="text-xs">
+                    <label class="block font-medium text-on-surface-variant mb-0.5">Extracted Notes / Observations:</label>
+                    <textarea id="ocr-edit-notes" rows="2" class="w-full px-2.5 py-1.5 rounded bg-surface-container-low border border-outline-variant/40 text-on-surface text-xs focus:ring-1 focus:ring-primary focus:outline-none" placeholder="Clinical notes..."></textarea>
+                  </div>
+
+                  <div class="text-xs">
+                    <label class="block font-medium text-on-surface-variant mb-0.5">Follow-Up Instructions:</label>
+                    <input id="ocr-edit-followup" type="text" class="w-full px-2.5 py-1.5 rounded bg-surface-container-low border border-outline-variant/40 text-on-surface text-xs focus:ring-1 focus:ring-primary focus:outline-none" placeholder="e.g. Follow-up after 2 weeks" />
+                  </div>
+
+                  <details class="text-[11px] text-on-surface-variant cursor-pointer pt-1">
+                    <summary class="hover:text-primary font-medium">View Raw Model Transcription</summary>
+                    <textarea id="ocr-extracted-text" class="w-full mt-1 p-2 rounded bg-surface-container font-mono text-[11px] text-on-surface-variant border border-outline-variant/30" rows="2"></textarea>
+                  </details>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="block font-label-lg text-label-lg text-on-surface">Continuity Marginalia / Hand
+                    Notes</label>
+                  <span class="font-annotation-sm text-annotation-sm text-tertiary">Visible to next visiting
+                    physician</span>
+                </div>
+                <textarea id="visit-notes-input"
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="Write narrative observations for traveling doctors who see this patient down the road..."
+                  rows="3"></textarea>
+              </div>
+            </form>
+          </div>
+          <!-- Drawer Footer -->
+          <div class="pt-6 border-t border-outline-variant/30 flex items-center justify-end gap-3 mt-6">
+            <button
+              class="px-4 py-2.5 rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container transition-colors"
+              id="cancel-add-visit-btn">
+              Cancel
+            </button>
+            <button
+              class="px-5 py-2.5 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container transition-all shadow-sm"
+              id="save-visit-btn">
+              Append to Continuity Parchment
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- MODAL 2: Register New Patient Modal -->
+      <div
+        class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-xs flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300"
+        id="register-modal">
+        <div
+          class="w-full max-w-2xl bg-surface-container-lowest rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 transform scale-95 transition-transform duration-300"
+          id="register-panel">
+          <div class="flex items-start justify-between pb-4 border-b border-outline-variant/30">
+            <div>
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">Universal
+                Registration</span>
+              <h3 class="font-headline-md text-headline-md text-on-surface">Create New Health Ledger</h3>
+              <p class="font-annotation-sm text-annotation-sm text-tertiary">Patient receives immutable QR credential
+                and portable Health ID</p>
+            </div>
+            <button class="p-2 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors"
+              id="close-register-btn">
+              <span class="material-symbols-outlined text-[22px]">close</span>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-label-lg text-label-lg text-on-surface mb-1">Full Legal Name</label>
+              <input id="reg-patient-name"
+                class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                placeholder="e.g. Meera Patel" type="text" />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-label-lg text-label-lg text-on-surface mb-1">Age</label>
+                <input id="reg-patient-age"
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="42" type="number" />
+              </div>
+              <div>
+                <label class="block font-label-lg text-label-lg text-on-surface mb-1">Gender</label>
+                <select id="reg-patient-gender"
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary">
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block font-label-lg text-label-lg text-on-surface mb-1">Mobile Contact / SMS Gateway</label>
+              <input id="reg-patient-phone"
+                class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                placeholder="+91 98765 43210" type="tel" />
+            </div>
+            <div>
+              <label class="block font-label-lg text-label-lg text-on-surface mb-1">Transit / Home Corridor</label>
+              <input id="reg-patient-corridor"
+                class="w-full px-3.5 py-2.5 rounded-lg bg-surface-container-low font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                placeholder="e.g. Western Ghats Agricultural Belt" type="text" />
+            </div>
+          </div>
+          <!-- Generated ID Preview Box -->
+          <div
+            class="p-4 rounded-xl bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary shadow-xs">
+                <span class="material-symbols-outlined text-[26px]">fingerprint</span>
+              </div>
+              <div>
+                <p class="font-label-lg text-label-lg text-on-surface">Universal Digital Health ID</p>
+                <p class="font-mono text-xs font-semibold text-primary">Generated Automatically on Issue</p>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-end gap-3 pt-3">
+            <button
+              class="px-4 py-2 rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container transition-colors"
+              id="cancel-register-btn">
+              Cancel
+            </button>
+            <button
+              class="px-5 py-2.5 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container transition-all shadow-sm"
+              id="confirm-register-btn">
+              Issue Ledger &amp; Open Folio
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- MODAL 3: Health ID QR Scanner Viewfinder & Card Reader -->
+      <div
+        class="fixed inset-0 z-50 bg-inverse-surface/60 backdrop-blur-xs flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300"
+        id="scan-viewfinder-modal">
+        <div
+          class="w-full max-w-md bg-surface-container-lowest rounded-2xl shadow-2xl p-6 space-y-4 text-center relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[20px]">qr_code_scanner</span>
+              <h3 class="font-title-md text-title-md text-on-surface">Scan Patient Health ID</h3>
+            </div>
+            <button class="p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors"
+              id="close-scanner-btn">
+              <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+
+          <!-- Camera Viewfinder Element -->
+          <div id="qr-camera-stream"
+            class="w-full aspect-square rounded-xl bg-black hidden overflow-hidden relative shadow-inner"></div>
+
+          <!-- Visual Simulated Box when camera is inactive -->
+          <div id="qr-simulated-box"
+            class="relative w-full aspect-square rounded-xl bg-surface-container-highest/60 flex flex-col items-center justify-center overflow-hidden border-2 border-dashed border-outline/40">
+            <div class="absolute inset-x-4 h-0.5 bg-primary/80 shadow-[0_0_8px_rgba(112,52,35,0.8)] animate-pulse"
+              style="animation: scanBeam 2.5s ease-in-out infinite;"></div>
+            <div
+              class="w-44 h-44 border-2 border-primary/60 rounded-xl flex flex-col items-center justify-center p-4 bg-surface/30">
+              <span class="material-symbols-outlined text-outline text-[44px] opacity-40">qr_code_2</span>
+              <span class="font-mono text-xs text-primary font-bold mt-2">Health ID QR</span>
+            </div>
+            <p class="font-annotation-sm text-annotation-sm text-tertiary mt-3">Scan card with camera, upload image, or
+              enter ID</p>
+          </div>
+
+          <!-- Action buttons: Live Camera & Upload Image -->
+          <div class="flex items-center justify-center gap-2">
+            <button type="button" id="btn-start-camera"
+              class="flex-1 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-label-lg flex items-center justify-center gap-1.5 transition-colors">
+              <span class="material-symbols-outlined text-[16px] text-primary">videocam</span>
+              <span id="camera-btn-text">Open Camera Scanner</span>
+            </button>
+            <input type="file" id="qr-file-input" accept="image/*" class="hidden" />
+            <button type="button" id="btn-upload-qr-img"
+              class="flex-1 py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-label-lg flex items-center justify-center gap-1.5 transition-colors">
+              <span class="material-symbols-outlined text-[16px] text-primary">image</span>
+              <span>Upload QR Photo</span>
+            </button>
+          </div>
+
+          <!-- Feedback Message -->
+          <div id="qr-scan-feedback" class="text-xs p-2.5 rounded-lg hidden font-medium text-left"></div>
+
+          <!-- Manual Health ID Entry -->
+          <div class="space-y-2 pt-1 text-left">
+            <label class="block text-xs font-label-lg text-on-surface-variant">Or Enter Patient Health ID:</label>
+            <div
+              class="flex items-center gap-2 bg-surface-container-low px-3 py-2 rounded-lg border border-outline-variant/40">
+              <span class="material-symbols-outlined text-outline text-sm">badge</span>
+              <input id="scan-qr-input" type="text" placeholder="e.g. AROG-HC2048 or AROG-7F29A1"
+                class="w-full bg-transparent font-mono text-xs text-on-surface focus:outline-none uppercase" />
+              <button id="lookup-qr-btn"
+                class="px-3 py-1 rounded bg-primary text-on-primary text-xs font-label-lg hover:bg-primary-container transition-colors shrink-0">Open
+                Folio</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="/frontend/api.js"></script>
+      <script>
+        (function initPatientsApp() {
+          let state = {
+            patients: [],
+            currentHealthId: null,
+            currentPatient: null,
+          };
+
+          // Modal elements
+          const addVisitModal = document.getElementById('add-visit-modal');
+          const addVisitPanel = document.getElementById('add-visit-panel');
+          const openAddVisitBtn = document.getElementById('open-add-visit-btn');
+          const closeAddVisitBtn = document.getElementById('close-add-visit-btn');
+          const cancelAddVisitBtn = document.getElementById('cancel-add-visit-btn');
+          const saveVisitBtn = document.getElementById('save-visit-btn');
+
+          const registerModal = document.getElementById('register-modal');
+          const registerPanel = document.getElementById('register-panel');
+          const openRegisterBtn = document.getElementById('open-register-modal');
+          const closeRegisterBtn = document.getElementById('close-register-btn');
+          const cancelRegisterBtn = document.getElementById('cancel-register-btn');
+          const confirmRegisterBtn = document.getElementById('confirm-register-btn');
+
+          const scanModal = document.getElementById('scan-viewfinder-modal');
+          const openScanModal = document.getElementById('open-scan-modal');
+          const cameraScanTrigger = document.getElementById('camera-scan-trigger');
+          const closeScannerBtn = document.getElementById('close-scanner-btn');
+          const simulateScanSuccess = document.getElementById('simulate-scan-success');
+          const scanQrInput = document.getElementById('scan-qr-input');
+          const lookupQrBtn = document.getElementById('lookup-qr-btn');
+
+          const patientSearchInput = document.getElementById('patient-search-input');
+          const focusSearchBtn = document.getElementById('focus-search-btn');
+          const patientListContainer = document.getElementById('patient-list');
+          const triggerAiSummaryBtn = document.getElementById('trigger-ai-summary');
+
+          // OCR Elements
+          const ocrDocInput = document.getElementById('ocr-doc-input');
+          const ocrStatusText = document.getElementById('ocr-status-text');
+          const ocrPreviewBox = document.getElementById('ocr-preview-box');
+          const ocrExtractedText = document.getElementById('ocr-extracted-text');
+          const ocrAppendBtn = document.getElementById('ocr-append-btn');
+
+          // Utility show/hide modal helpers
+          function showModal(modal, panel, isDrawer = false) {
+            if (!modal || !panel) return;
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+              modal.classList.remove('opacity-0');
+              if (isDrawer) {
+                panel.classList.remove('translate-x-full');
+              } else {
+                panel.classList.remove('scale-95');
+              }
+            });
+          }
+
+          function hideModal(modal, panel, isDrawer = false) {
+            if (!modal || !panel) return;
+            if (isDrawer) {
+              panel.classList.add('translate-x-full');
+            } else {
+              panel.classList.add('scale-95');
+            }
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+              modal.classList.add('hidden');
+            }, 300);
+          }
+
+          // Geolocation detection helper (Requirement 14)
+          async function detectLocationForVisit() {
+            const statusBadge = document.getElementById('gps-status-badge');
+            const coordsDisplay = document.getElementById('gps-coords-display');
+            const latInput = document.getElementById('visit-lat-input');
+            const lngInput = document.getElementById('visit-lng-input');
+            const locInput = document.getElementById('visit-location-input');
+
+            if (statusBadge) statusBadge.textContent = 'Detecting GPS...';
+            try {
+              const loc = await AROG_API.getCurrentLocation();
+              if (loc.latitude && loc.longitude) {
+                if (latInput) latInput.value = loc.latitude.toFixed(6);
+                if (lngInput) lngInput.value = loc.longitude.toFixed(6);
+                if (coordsDisplay) coordsDisplay.textContent = `Coordinates: ${loc.latitude.toFixed(4)}° N, ${loc.longitude.toFixed(4)}° E`;
+                if (locInput && (!locInput.value || locInput.value.includes('Community Health Centre'))) {
+                  locInput.value = loc.location_name;
+                }
+                if (statusBadge) statusBadge.textContent = '✓ GPS Locked';
+              }
+            } catch (err) {
+              console.warn('Geolocation warning:', err.message);
+              if (statusBadge) statusBadge.textContent = 'GPS Manual';
+              if (coordsDisplay) coordsDisplay.textContent = 'Location permission is required to automatically record the visit location.';
+            }
+          }
+
+          const detectGpsBtn = document.getElementById('btn-detect-gps');
+          if (detectGpsBtn) {
+            detectGpsBtn.addEventListener('click', () => detectLocationForVisit());
+          }
+
+          // Modal Triggers
+          if (openAddVisitBtn) openAddVisitBtn.addEventListener('click', () => {
+            // Set today's date in input
+            const dateInput = document.getElementById('visit-date-input');
+            if (dateInput && !dateInput.value) {
+              dateInput.value = new Date().toISOString().split('T')[0];
+            }
+            // Strictly populate doctor name from authenticated profile (Requirement 10)
+            const user = AROG_API.getUserInfo();
+            const docInput = document.getElementById('visit-doctor-input');
+            if (docInput && user && user.name) {
+              docInput.value = user.name;
+            }
+            showModal(addVisitModal, addVisitPanel, true);
+            detectLocationForVisit();
+          });
+          if (closeAddVisitBtn) closeAddVisitBtn.addEventListener('click', () => hideModal(addVisitModal, addVisitPanel, true));
+          if (cancelAddVisitBtn) cancelAddVisitBtn.addEventListener('click', () => hideModal(addVisitModal, addVisitPanel, true));
+
+          if (openRegisterBtn) openRegisterBtn.addEventListener('click', () => showModal(registerModal, registerPanel));
+          if (closeRegisterBtn) closeRegisterBtn.addEventListener('click', () => hideModal(registerModal, registerPanel));
+          if (cancelRegisterBtn) cancelRegisterBtn.addEventListener('click', () => hideModal(registerModal, registerPanel));
+
+          const triggerScanner = () => showModal(scanModal, scanModal.firstElementChild);
+          if (openScanModal) openScanModal.addEventListener('click', triggerScanner);
+          if (closeScannerBtn) closeScannerBtn.addEventListener('click', () => hideModal(scanModal, scanModal.firstElementChild));
+
+          // Card reader button triggers OCR directly
+          if (cameraScanTrigger) {
+            cameraScanTrigger.addEventListener('click', () => {
+              if (ocrDocInput) {
+                ocrDocInput.click();
+              } else {
+                triggerScanner();
+              }
+            });
+          }
+
+          if (focusSearchBtn && patientSearchInput) {
+            focusSearchBtn.addEventListener('click', () => patientSearchInput.focus());
+          }
+
+          // Format date utility
+          function formatDate(dateStr) {
+            if (!dateStr) return 'Not recorded';
+            try {
+              const d = new Date(dateStr);
+              return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            } catch (e) {
+              return dateStr;
+            }
+          }
+
+          // Safe parser for JSON or string
+          function parseSafeArray(val) {
+            if (!val) return [];
+            if (Array.isArray(val)) return val;
+            try {
+              const parsed = JSON.parse(val);
+              return Array.isArray(parsed) ? parsed : [String(parsed)];
+            } catch (e) {
+              return [val];
+            }
+          }
+
+          // Render patient list
+          function renderPatientList(patients) {
+            const countBadge = document.getElementById('patients-count-badge');
+            if (countBadge) countBadge.textContent = `${patients.length} Active`;
+
+            if (!patientListContainer) return;
+            patientListContainer.innerHTML = '';
+
+            if (patients.length === 0) {
+              patientListContainer.innerHTML = `
+          <div class="p-6 text-center rounded-xl bg-surface-container-low text-on-surface-variant">
+            <span class="material-symbols-outlined text-[32px] text-tertiary mb-2">person_search</span>
+            <p class="font-body-md text-sm">No matching patient records found.</p>
+            <p class="font-annotation-sm text-xs text-primary mt-1">Click "Register New Patient" above to establish a new ledger.</p>
+          </div>
+        `;
+              return;
+            }
+
+            patients.forEach(p => {
+              const isSelected = p.health_id === state.currentHealthId;
+              const card = document.createElement('div');
+              card.className = `patient-card cursor-pointer group relative p-5 rounded-xl transition-all ${isSelected
+                  ? 'bg-surface-container-lowest shadow-[0_4px_18px_rgba(44,40,37,0.06)] ring-2 ring-primary/80'
+                  : 'bg-surface-container-low hover:bg-surface-container-lowest hover:shadow-[0_4px_16px_rgba(44,40,37,0.04)]'
+                }`;
+              card.setAttribute('data-health-id', p.health_id);
+
+              const lastVisitText = p.last_visit_date ? formatDate(p.last_visit_date) : 'New Ledger';
+              const visitCountText = p.visit_count ? `${p.visit_count} visit${p.visit_count > 1 ? 's' : ''}` : 'No visits yet';
+
+              card.innerHTML = `
+          ${isSelected ? '<div class="absolute left-0 top-4 bottom-4 w-1.5 bg-primary rounded-r-full"></div>' : ''}
+          <div class="flex items-start justify-between gap-2 ${isSelected ? 'pl-2' : ''}">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">${p.name}</h3>
+                <span class="font-label-sm text-label-sm text-secondary font-normal">${p.age ? p.age + 'y' : ''} ${p.gender ? '· ' + p.gender.charAt(0) : ''}</span>
+              </div>
+              <p class="font-mono text-xs text-primary font-medium tracking-wider mt-0.5">${p.health_id}</p>
+            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${isSelected ? 'bg-primary-fixed text-on-primary-fixed' : 'bg-surface-container text-on-surface-variant'
+                }">
+              ${p.visit_count > 0 ? p.visit_count + ' visits' : 'New'}
+            </span>
+          </div>
+          <div class="mt-4 pt-3 ${isSelected ? 'pl-2' : ''} flex flex-col gap-1.5 text-xs text-on-surface-variant">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px] text-tertiary">calendar_clock</span>
+                Last visit
+              </span>
+              <span class="font-medium text-on-surface">${lastVisitText}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px] text-tertiary">hub</span>
+                Continuous route
+              </span>
+              <span>${visitCountText}</span>
+            </div>
+          </div>
+        `;
+
+              card.addEventListener('click', () => selectPatient(p.health_id));
+              patientListContainer.appendChild(card);
+            });
+          }
+
+          // Select and load patient details
+          async function selectPatient(healthId) {
+            if (!healthId) return;
+            state.currentHealthId = healthId;
+
+            try {
+              const patient = await AROG_API.getPatient(healthId);
+              state.currentPatient = patient;
+
+              // Reveal patient details folio and hide empty state (Requirement 9)
+              const emptyState = document.getElementById('patient-empty-state');
+              const detailsFolio = document.getElementById('patient-details-folio');
+              if (emptyState) emptyState.classList.add('hidden');
+              if (detailsFolio) detailsFolio.classList.remove('hidden');
+
+              // Update Header
+              const nameEl = document.getElementById('patient-name-view');
+              if (nameEl) nameEl.textContent = patient.name;
+
+              const initials = patient.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+              const monogramEl = document.getElementById('patient-monogram');
+              if (monogramEl) monogramEl.textContent = initials || 'PT';
+
+              const metaEl = document.getElementById('patient-meta-text');
+              if (metaEl) {
+                metaEl.innerHTML = `
+            <span>${patient.age ? patient.age + ' years' : 'Age unrecorded'} · ${patient.gender || 'Unspecified'}</span>
+            <span class="inline-block w-1 h-1 rounded-full bg-outline-variant"></span>
+            <span class="font-mono text-primary font-semibold">${patient.health_id}</span>
+            <span class="inline-block w-1 h-1 rounded-full bg-outline-variant"></span>
+            <span>${patient.corridor ? 'Corridor: ' + patient.corridor : 'Universal Continuity Ledger'}</span>
+          `;
+              }
+
+              const qrCaption = document.getElementById('patient-qr-caption');
+              if (qrCaption) qrCaption.textContent = patient.health_id;
+
+              // Render genuine scannable QR code (Requirement 12)
+              const qrContainer = document.getElementById('patient-qr-container');
+              if (qrContainer) {
+                AROG_API.generateQR(patient.health_id, qrContainer, 72);
+              }
+
+              const drawerSub = document.getElementById('drawer-patient-sub');
+              if (drawerSub) drawerSub.textContent = `Patient: ${patient.name} (${patient.health_id})`;
+
+              // Render Visits Timeline
+              renderTimeline(patient.visits || []);
+
+              // Render Medicines and Allergies Tiles
+              renderTiles(patient.visits || []);
+
+              // Render AI Analysis
+              renderAiAnalysis(patient.ai_analyses || [], patient.visits || []);
+
+              // Refresh list active state
+              renderPatientList(state.patients);
+
+            } catch (err) {
+              console.error('Failed to load patient:', err);
+              alert('Could not load patient records: ' + (err.message || err));
+            }
+          }
+
+          // Render Timeline visits
+          function renderTimeline(visits) {
+            const container = document.getElementById('timeline-visits-container');
+            if (!container) return;
+
+            if (!visits || visits.length === 0) {
+              container.innerHTML = `
+          <div class="p-6 rounded-lg bg-surface-container-low text-center">
+            <span class="material-symbols-outlined text-[32px] text-tertiary mb-2">history_edu</span>
+            <p class="font-body-md text-sm text-on-surface">No clinical encounters recorded yet for this patient.</p>
+            <p class="font-annotation-sm text-xs text-primary mt-1">Click "＋ Add Visit" above to append the initial clinical record.</p>
+          </div>
+        `;
+              return;
+            }
+
+            container.innerHTML = '';
+            visits.forEach((v, index) => {
+              const isLatest = index === 0;
+              const icon = isLatest ? 'local_hospital' : 'airport_shuttle';
+              const iconBg = isLatest ? 'bg-primary text-on-primary' : 'bg-secondary text-on-secondary';
+
+              const visitEl = document.createElement('div');
+              visitEl.className = 'relative';
+              visitEl.innerHTML = `
+          <div class="absolute -left-[30px] sm:-left-[38px] top-1.5 w-6 h-6 rounded-full ${iconBg} flex items-center justify-center text-xs shadow-xs">
+            <span class="material-symbols-outlined text-[14px]">${icon}</span>
+          </div>
+          <div class="p-5 rounded-lg bg-surface-container-low transition-all hover:bg-surface-container/70">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="font-label-lg text-label-lg text-primary font-bold">${formatDate(v.visit_date)}</span>
+                <span class="text-xs text-outline">•</span>
+                <span class="font-title-md text-sm text-on-surface font-semibold">${v.doctor_name || 'Attending Physician'}</span>
+              </div>
+              <span class="font-label-sm text-label-sm text-on-surface-variant">${v.location || 'Travelling Clinic'}</span>
+            </div>
+            <p class="font-body-md text-body-md text-on-surface mt-2">
+              <span class="font-medium text-tertiary">Clinical Assessment & Notes:</span> ${v.notes || 'Routine consultation documented.'}
+            </p>
+            <div class="mt-3.5 pt-3 flex flex-wrap items-center gap-3">
+              ${v.medicines ? `
+                <span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md bg-surface-container-highest text-on-surface-variant">
+                  <span class="material-symbols-outlined text-[14px]">medication</span> ${v.medicines}
+                </span>` : ''}
+              ${v.reactions ? `
+                <span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md bg-error-container text-on-error-container">
+                  <span class="material-symbols-outlined text-[14px]">warning</span> ${v.reactions}
+                </span>` : ''}
+              ${v.follow_up ? `
+                <span class="font-annotation-sm text-annotation-sm text-primary ml-auto">
+                  Follow-up: "${v.follow_up}"
+                </span>` : ''}
+            </div>
+          </div>
+        `;
+              container.appendChild(visitEl);
+            });
+          }
+
+          // Render Active Medicines & Allergies tiles
+          function renderTiles(visits) {
+            const medContainer = document.getElementById('active-medicines-container');
+            const allergyContainer = document.getElementById('allergies-risks-container');
+
+            // Extract unique medicines
+            const allMeds = [];
+            const allReactions = [];
+
+            visits.forEach(v => {
+              if (v.medicines && typeof v.medicines === 'string' && v.medicines.toLowerCase() !== 'none') {
+                v.medicines.split(/[,;\n]+/).forEach(m => {
+                  const trimmed = m.trim();
+                  if (trimmed && !allMeds.some(x => x.text.toLowerCase() === trimmed.toLowerCase())) {
+                    allMeds.push({ text: trimmed, doctor: v.doctor_name, date: formatDate(v.visit_date) });
+                  }
+                });
+              }
+              if (v.reactions && typeof v.reactions === 'string' && v.reactions.toLowerCase() !== 'none') {
+                const trimmed = v.reactions.trim();
+                if (trimmed && !allReactions.some(r => r.text.toLowerCase() === trimmed.toLowerCase())) {
+                  allReactions.push({ text: trimmed, doctor: v.doctor_name, date: formatDate(v.visit_date) });
+                }
+              }
+            });
+
+            if (medContainer) {
+              if (allMeds.length === 0) {
+                medContainer.innerHTML = '<p class="text-xs text-on-surface-variant p-2">No active medications documented.</p>';
+              } else {
+                medContainer.innerHTML = allMeds.slice(0, 3).map(m => `
+            <div class="p-2.5 rounded-lg bg-surface-container-low">
+              <p class="font-title-md text-sm text-on-surface font-semibold">${m.text}</p>
+              <p class="text-[11px] text-on-surface-variant">${m.doctor || 'Physician'} · ${m.date}</p>
+            </div>
+          `).join('');
+              }
+            }
+
+            if (allergyContainer) {
+              if (allReactions.length === 0) {
+                allergyContainer.innerHTML = '<div class="p-2.5 rounded-lg bg-surface-container-low"><p class="text-xs text-on-surface-variant">No known drug allergies reported.</p></div>';
+              } else {
+                allergyContainer.innerHTML = allReactions.map(r => `
+            <div class="p-3 rounded-lg bg-error-container/40 space-y-1">
+              <p class="font-title-md text-sm text-on-surface font-semibold">${r.text}</p>
+              <span class="text-[10px] font-mono text-tertiary block mt-0.5">Recorded by ${r.doctor || 'Doctor'} · ${r.date}</span>
+            </div>
+          `).join('');
+              }
+            }
+          }
+
+          // Render AI Analysis
+          function renderAiAnalysis(analyses, visits) {
+            const summaryText = document.getElementById('ai-summary-text');
+            const summaryBadge = document.getElementById('ai-summary-badge');
+            const missingList = document.getElementById('ai-missing-info-list');
+            const contraBox = document.getElementById('ai-contradictions-box');
+            const contraContent = document.getElementById('ai-contradictions-content');
+
+            if (!summaryText) return;
+
+            if (!analyses || analyses.length === 0) {
+              summaryText.innerHTML = visits.length > 0
+                ? `Records ready for clinical analysis. Click <strong>"AI Continuity Summary"</strong> to synthesize ${visits.length} clinical visits, surface missing records, and flag contradictions.`
+                : `No visits recorded yet. Add visits to generate AI continuity insights.`;
+              if (summaryBadge) summaryBadge.textContent = 'AI Synthesis Pending';
+              if (missingList) missingList.innerHTML = '';
+              if (contraBox) contraBox.classList.add('hidden');
+              return;
+            }
+
+            const latest = analyses[0];
+            if (summaryBadge) {
+              summaryBadge.textContent = `Synthesized from ${visits.length} recorded visit${visits.length === 1 ? '' : 's'}`;
+            }
+            summaryText.textContent = latest.summary || 'Summary unavailable.';
+
+            // Missing information
+            const missing = parseSafeArray(latest.missing_information);
+            if (missingList) {
+              missingList.innerHTML = '';
+              missing.forEach(item => {
+                const badge = document.createElement('div');
+                badge.className = 'flex items-center gap-1.5';
+                badge.innerHTML = `
+            <span class="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+            <span>${item}</span>
+          `;
+                missingList.appendChild(badge);
+              });
+            }
+
+            // Contradictions
+            const contradictions = parseSafeArray(latest.contradictions);
+            if (contraBox && contraContent) {
+              const hasContra = contradictions.length > 0 && String(contradictions[0] || '').trim().length > 0;
+              if (hasContra) {
+                contraBox.classList.remove('hidden');
+                contraContent.innerHTML = `
+            <p class="font-semibold text-error text-xs uppercase tracking-wider">Clinical Discrepancy Flagged For Doctor Verification:</p>
+            ${contradictions.map(c => `<p class="mt-0.5 text-xs text-on-error-container">${String(c)}</p>`).join('')}
+          `;
+              } else {
+                contraBox.classList.add('hidden');
+              }
+            }
+          }
+
+          // Load all patients from backend (Requirement 9)
+          async function loadPatients(search = '') {
+            // Strict check before making any API calls
+            if (!AROG_API.isLoggedIn()) {
+              window.location.replace('/frontend/arog_sign_in_clinical_portal/code.html');
+              return;
+            }
+
+            try {
+              // Verify authentication with backend profile check
+              const profile = await AROG_API.getProfile().catch(err => null);
+              if (!profile) {
+                AROG_API.clearToken();
+                window.location.replace('/frontend/arog_sign_in_clinical_portal/code.html');
+                return;
+              }
+
+              // Remove checking auth overlay now that user is confirmed
+              document.body.classList.remove('auth-pending');
+              const authOverlay = document.getElementById('auth-checking-state');
+              if (authOverlay) authOverlay.remove();
+
+              const patients = await AROG_API.getPatients(search);
+              state.patients = patients;
+              renderPatientList(patients);
+
+              // Do not automatically open patient details on initial page load
+              if (state.currentHealthId) {
+                const exists = patients.some(p => p.health_id === state.currentHealthId);
+                if (exists) {
+                  selectPatient(state.currentHealthId);
+                }
+              }
+            } catch (err) {
+              console.error('Error loading patients:', err);
+              if (err.message && (err.message.includes('401') || err.message.includes('Authentication required') || err.message.includes('log in'))) {
+                AROG_API.clearToken();
+                window.location.replace('/frontend/arog_sign_in_clinical_portal/code.html');
+              }
+            }
+          }
+
+          // Search filter with debounce
+          let searchTimeout = null;
+          if (patientSearchInput) {
+            patientSearchInput.addEventListener('input', (e) => {
+              clearTimeout(searchTimeout);
+              searchTimeout = setTimeout(() => {
+                loadPatients(e.target.value.trim());
+              }, 300);
+            });
+          }
+
+          // Trigger AI Analysis Button (Requirement 12: Only runs when clicked)
+          if (triggerAiSummaryBtn) {
+            triggerAiSummaryBtn.addEventListener('click', async () => {
+              if (!state.currentHealthId) {
+                alert('Please select a patient first.');
+                return;
+              }
+
+              const summaryText = document.getElementById('ai-summary-text');
+              if (summaryText) {
+                summaryText.innerHTML = '<span class="italic text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Synthesizing clinical encounters across travelling networks with Gemini...</span>';
+              }
+
+              try {
+                const analysis = await AROG_API.analyzePatient(state.currentHealthId);
+                // Reload patient to refresh with the saved analysis
+                await selectPatient(state.currentHealthId);
+              } catch (err) {
+                alert('AI Analysis failed: ' + err.message);
+                if (summaryText) summaryText.textContent = 'Analysis could not be completed.';
+              }
+            });
+          }
+
+          // OCR & Camera Handlers (Requirements 17, 18, 19)
+          const btnOcrUploadDoc = document.getElementById('btn-ocr-upload-doc');
+          const btnOcrUseCamera = document.getElementById('btn-ocr-use-camera');
+          const ocrCameraContainer = document.getElementById('ocr-camera-container');
+          const ocrCameraVideo = document.getElementById('ocr-camera-video');
+          const ocrCameraCanvas = document.getElementById('ocr-camera-canvas');
+          const btnOcrCapturePhoto = document.getElementById('btn-ocr-capture-photo');
+          const btnOcrCancelCamera = document.getElementById('btn-ocr-cancel-camera');
+          const ocrCameraMsg = document.getElementById('ocr-camera-msg');
+          const ocrPhotoPreviewContainer = document.getElementById('ocr-photo-preview-container');
+          const ocrCapturedPreviewImg = document.getElementById('ocr-captured-preview-img');
+          const btnOcrUsePhoto = document.getElementById('btn-ocr-use-photo');
+          const btnOcrRetakePhoto = document.getElementById('btn-ocr-retake-photo');
+          const ocrEditDate = document.getElementById('ocr-edit-date');
+          const ocrEditMedicine = document.getElementById('ocr-edit-medicine');
+          const ocrEditNotes = document.getElementById('ocr-edit-notes');
+          const ocrEditFollowup = document.getElementById('ocr-edit-followup');
+          const btnPopulateVisitForm = document.getElementById('btn-populate-visit-form');
+
+          let ocrCameraStream = null;
+          let ocrCapturedBlob = null;
+
+          if (btnOcrUploadDoc && ocrDocInput) {
+            btnOcrUploadDoc.addEventListener('click', () => ocrDocInput.click());
+          }
+
+          async function handleOcrProcessing(file) {
+            if (!file) return;
+            if (ocrStatusText) ocrStatusText.textContent = `Running TrOCR on "${file.name || 'photo'}"...`;
+            if (ocrPreviewBox) ocrPreviewBox.classList.add('hidden');
+
+            try {
+              const res = await AROG_API.runOCR(file);
+              if (ocrStatusText) ocrStatusText.textContent = `✓ Text extracted (${file.name || 'photo'})`;
+              if (ocrExtractedText) ocrExtractedText.value = res.extracted_text || '(No text recognized)';
+
+              // Populate structured fields for doctor review (Requirement 19)
+              const struct = res.structured_data || {};
+              if (ocrEditDate) ocrEditDate.value = struct.date || '';
+              if (ocrEditMedicine) {
+                const med = struct.medicine || '';
+                const dose = struct.dosage ? ` ${struct.dosage}` : '';
+                ocrEditMedicine.value = med ? `${med}${dose}` : (struct.dosage || '');
+              }
+              if (ocrEditNotes) ocrEditNotes.value = struct.notes || res.extracted_text || '';
+              if (ocrEditFollowup) ocrEditFollowup.value = struct.follow_up || '';
+
+              if (ocrPreviewBox) ocrPreviewBox.classList.remove('hidden');
+
+              // If drawer was closed, open it to review extracted data
+              if (addVisitModal.classList.contains('hidden')) {
+                showModal(addVisitModal, addVisitPanel, true);
+              }
+            } catch (err) {
+              if (ocrStatusText) ocrStatusText.textContent = `OCR failed: ${err.message}`;
+              alert('TrOCR Error: ' + err.message);
+            }
+          }
+
+          if (ocrDocInput) {
+            ocrDocInput.addEventListener('change', async (e) => {
+              const file = e.target.files && e.target.files[0];
+              if (file) await handleOcrProcessing(file);
+            });
+          }
+
+          function stopOcrCamera() {
+            if (ocrCameraStream) {
+              ocrCameraStream.getTracks().forEach(t => t.stop());
+              ocrCameraStream = null;
+            }
+            if (ocrCameraContainer) ocrCameraContainer.classList.add('hidden');
+            if (ocrCameraVideo) ocrCameraVideo.srcObject = null;
+          }
+
+          if (btnOcrUseCamera) {
+            btnOcrUseCamera.addEventListener('click', async () => {
+              if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Camera access is not supported by your browser. Please use "Upload Document".');
+                return;
+              }
+              if (ocrPhotoPreviewContainer) ocrPhotoPreviewContainer.classList.add('hidden');
+              if (ocrCameraContainer) ocrCameraContainer.classList.remove('hidden');
+              if (ocrCameraMsg) {
+                ocrCameraMsg.textContent = 'Position document in frame and click Capture Photo.';
+                ocrCameraMsg.className = 'text-xs text-secondary font-annotation-sm';
+              }
+
+              try {
+                ocrCameraStream = await navigator.mediaDevices.getUserMedia({
+                  video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+                });
+                if (ocrCameraVideo) {
+                  ocrCameraVideo.srcObject = ocrCameraStream;
+                  await ocrCameraVideo.play().catch(() => {});
+                }
+              } catch (err) {
+                console.warn('Camera error:', err);
+                if (ocrCameraMsg) {
+                  ocrCameraMsg.textContent = 'Camera permission was denied or camera unavailable. Please use "Upload Document".';
+                  ocrCameraMsg.className = 'text-xs text-error font-medium p-1';
+                }
+              }
+            });
+          }
+
+          if (btnOcrCapturePhoto) {
+            btnOcrCapturePhoto.addEventListener('click', () => {
+              if (!ocrCameraVideo || !ocrCameraCanvas) return;
+              const w = ocrCameraVideo.videoWidth || 640;
+              const h = ocrCameraVideo.videoHeight || 480;
+              ocrCameraCanvas.width = w;
+              ocrCameraCanvas.height = h;
+              const ctx = ocrCameraCanvas.getContext('2d');
+              ctx.drawImage(ocrCameraVideo, 0, 0, w, h);
+
+              ocrCameraCanvas.toBlob((blob) => {
+                ocrCapturedBlob = blob;
+                const dataUrl = ocrCameraCanvas.toDataURL('image/jpeg');
+                if (ocrCapturedPreviewImg) ocrCapturedPreviewImg.src = dataUrl;
+                stopOcrCamera();
+                if (ocrPhotoPreviewContainer) ocrPhotoPreviewContainer.classList.remove('hidden');
+              }, 'image/jpeg', 0.92);
+            });
+          }
+
+          if (btnOcrCancelCamera) {
+            btnOcrCancelCamera.addEventListener('click', stopOcrCamera);
+          }
+
+          if (btnOcrRetakePhoto) {
+            btnOcrRetakePhoto.addEventListener('click', () => {
+              if (ocrPhotoPreviewContainer) ocrPhotoPreviewContainer.classList.add('hidden');
+              if (btnOcrUseCamera) btnOcrUseCamera.click();
+            });
+          }
+
+          if (btnOcrUsePhoto) {
+            btnOcrUsePhoto.addEventListener('click', async () => {
+              if (!ocrCapturedBlob) return;
+              if (ocrPhotoPreviewContainer) ocrPhotoPreviewContainer.classList.add('hidden');
+              const file = new File([ocrCapturedBlob], 'camera_document.jpg', { type: 'image/jpeg' });
+              await handleOcrProcessing(file);
+            });
+          }
+
+          // Populate extracted fields into Visit Form (Requirement 17 & 19)
+          if (btnPopulateVisitForm) {
+            btnPopulateVisitForm.addEventListener('click', () => {
+              const dt = ocrEditDate?.value?.trim();
+              const med = ocrEditMedicine?.value?.trim();
+              const notes = ocrEditNotes?.value?.trim();
+              const fu = ocrEditFollowup?.value?.trim();
+
+              if (dt) {
+                const dateInput = document.getElementById('visit-date-input');
+                if (dateInput) {
+                  const dObj = new Date(dt);
+                  if (!isNaN(dObj.getTime())) {
+                    dateInput.value = dObj.toISOString().split('T')[0];
+                  }
+                }
+              }
+              if (med) {
+                const medInput = document.getElementById('visit-medicines-input');
+                if (medInput) {
+                  medInput.value = (medInput.value ? medInput.value + ', ' : '') + med;
+                }
+              }
+              if (notes) {
+                const notesInput = document.getElementById('visit-notes-input');
+                if (notesInput) {
+                  notesInput.value = (notesInput.value ? notesInput.value + '\n' : '') + notes;
+                }
+              }
+              if (fu) {
+                const fuInput = document.getElementById('visit-followup-input');
+                if (fuInput) {
+                  fuInput.value = fu;
+                }
+              }
+
+              btnPopulateVisitForm.textContent = '✓ Form Populated';
+              btnPopulateVisitForm.className = 'px-2.5 py-1 rounded-full bg-surface-container text-primary font-bold text-[11px]';
+              setTimeout(() => {
+                btnPopulateVisitForm.textContent = 'Populate Visit Form';
+                btnPopulateVisitForm.className = 'px-2.5 py-1 rounded-full bg-primary text-on-primary text-[11px] font-label-lg flex items-center gap-1 hover:bg-primary-container shadow-xs cursor-pointer';
+              }, 2500);
+            });
+          }
+
+
+          // Save Visit form handler
+          if (saveVisitBtn) {
+            saveVisitBtn.addEventListener('click', async () => {
+              if (!state.currentHealthId) {
+                alert('No patient selected.');
+                return;
+              }
+
+              const dateVal = document.getElementById('visit-date-input')?.value;
+              const docVal = document.getElementById('visit-doctor-input')?.value;
+              const locVal = document.getElementById('visit-location-input')?.value;
+              const latVal = parseFloat(document.getElementById('visit-lat-input')?.value) || null;
+              const lngVal = parseFloat(document.getElementById('visit-lng-input')?.value) || null;
+              const complaintVal = document.getElementById('visit-complaint-input')?.value;
+              const medsVal = document.getElementById('visit-medicines-input')?.value;
+              const reactVal = document.getElementById('visit-reactions-input')?.value;
+              const notesVal = document.getElementById('visit-notes-input')?.value;
+              const followupVal = document.getElementById('visit-followup-input')?.value;
+
+              const combinedNotes = (complaintVal ? `Complaint: ${complaintVal}. ` : '') + (notesVal || '');
+
+              saveVisitBtn.disabled = true;
+              saveVisitBtn.textContent = 'Saving...';
+
+              try {
+                await AROG_API.addVisit(state.currentHealthId, {
+                  visit_date: dateVal ? new Date(dateVal).toISOString() : new Date().toISOString(),
+                  doctor_name: docVal,
+                  location: locVal,
+                  latitude: latVal,
+                  longitude: lngVal,
+                  notes: combinedNotes,
+                  medicines: medsVal,
+                  reactions: reactVal,
+                  follow_up: followupVal,
+                });
+
+                hideModal(addVisitModal, addVisitPanel, true);
+                // Reload patient to show newly appended record
+                await selectPatient(state.currentHealthId);
+                // Re-sort and update recent patient list
+                await loadPatients();
+                // Reset form
+                if (ocrPreviewBox) ocrPreviewBox.classList.add('hidden');
+                if (ocrStatusText) ocrStatusText.textContent = 'No document chosen';
+                document.getElementById('visit-complaint-input').value = '';
+                document.getElementById('visit-notes-input').value = '';
+              } catch (err) {
+                alert('Failed to save visit: ' + err.message);
+              } finally {
+                saveVisitBtn.disabled = false;
+                saveVisitBtn.textContent = 'Append to Continuity Parchment';
+              }
+            });
+          }
+
+          // Register Patient form handler
+          if (confirmRegisterBtn) {
+            confirmRegisterBtn.addEventListener('click', async () => {
+              const nameVal = document.getElementById('reg-patient-name')?.value?.trim();
+              const ageVal = parseInt(document.getElementById('reg-patient-age')?.value) || null;
+              const genderVal = document.getElementById('reg-patient-gender')?.value;
+              const phoneVal = document.getElementById('reg-patient-phone')?.value?.trim();
+              const corridorVal = document.getElementById('reg-patient-corridor')?.value?.trim();
+
+              if (!nameVal) {
+                alert('Please enter patient full legal name.');
+                return;
+              }
+
+              confirmRegisterBtn.disabled = true;
+              confirmRegisterBtn.textContent = 'Issuing Ledger...';
+
+              try {
+                const newPt = await AROG_API.createPatient({
+                  name: nameVal,
+                  age: ageVal,
+                  gender: genderVal,
+                  phone: phoneVal,
+                  corridor: corridorVal,
+                });
+
+                hideModal(registerModal, registerPanel);
+                // Reset fields
+                document.getElementById('reg-patient-name').value = '';
+                document.getElementById('reg-patient-age').value = '';
+                document.getElementById('reg-patient-phone').value = '';
+                document.getElementById('reg-patient-corridor').value = '';
+
+                // Reload and select newly registered patient
+                await loadPatients();
+                await selectPatient(newPt.health_id);
+                alert(`Health Ledger Created! Digital Health ID: ${newPt.health_id}`);
+              } catch (err) {
+                alert('Failed to register patient: ' + err.message);
+              } finally {
+                confirmRegisterBtn.disabled = false;
+                confirmRegisterBtn.textContent = 'Issue Ledger & Open Folio';
+              }
+            });
+          }
+
+          // QR Scanner with Live Camera, File Upload, and Health ID Lookup
+          let html5QrScanner = null;
+
+          async function handleQrDecode(rawText) {
+            if (!rawText || !rawText.trim()) return;
+            const feedback = document.getElementById('qr-scan-feedback');
+            if (feedback) {
+              feedback.className = 'text-xs p-2.5 rounded-lg bg-surface-container text-on-surface font-medium flex items-center justify-center gap-2';
+              feedback.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span> Verifying Health ID in ledger...';
+              feedback.classList.remove('hidden');
+            }
+
+            // Extract Health ID (e.g. AROG-7F29A1 or AROG-HC2048)
+            let hid = rawText.trim();
+            const match = hid.match(/AROG-[A-Za-z0-9]+/i);
+            if (match) hid = match[0].toUpperCase();
+
+            try {
+              const patient = await AROG_API.getPatient(hid);
+              if (patient) {
+                if (feedback) {
+                  feedback.className = 'text-xs p-2.5 rounded-lg bg-primary-fixed text-on-primary-fixed font-medium';
+                  feedback.textContent = `✓ Found patient: ${patient.name} (${patient.health_id})`;
+                }
+                stopCameraScanner();
+                setTimeout(() => {
+                  hideModal(scanModal, scanModal.firstElementChild);
+                  if (feedback) feedback.classList.add('hidden');
+                  selectPatient(patient.health_id);
+                }, 350);
+              }
+            } catch (err) {
+              if (feedback) {
+                feedback.className = 'text-xs p-2.5 rounded-lg bg-error-container text-on-error-container font-medium';
+                feedback.textContent = `Patient not found with Health ID: "${hid}"`;
+                feedback.classList.remove('hidden');
+              }
+            }
+          }
+
+          function stopCameraScanner() {
+            if (html5QrScanner) {
+              try {
+                html5QrScanner.stop().catch(() => { });
+              } catch (_) { }
+              html5QrScanner = null;
+            }
+            const streamBox = document.getElementById('qr-camera-stream');
+            const simBox = document.getElementById('qr-simulated-box');
+            const camText = document.getElementById('camera-btn-text');
+            if (streamBox) streamBox.classList.add('hidden');
+            if (simBox) simBox.classList.remove('hidden');
+            if (camText) camText.textContent = 'Open Camera Scanner';
+          }
+
+          async function toggleCameraScanner() {
+            const streamBox = document.getElementById('qr-camera-stream');
+            const simBox = document.getElementById('qr-simulated-box');
+            const feedback = document.getElementById('qr-scan-feedback');
+            const camText = document.getElementById('camera-btn-text');
+
+            if (html5QrScanner) {
+              stopCameraScanner();
+              return;
+            }
+
+            if (typeof Html5Qrcode === 'undefined') {
+              if (feedback) {
+                feedback.className = 'text-xs p-2.5 rounded-lg bg-error-container text-on-error-container font-medium';
+                feedback.textContent = 'Camera scanner library not ready. You can upload an image or enter Health ID below.';
+                feedback.classList.remove('hidden');
+              }
+              return;
+            }
+
+            try {
+              streamBox.innerHTML = '';
+              streamBox.classList.remove('hidden');
+              simBox.classList.add('hidden');
+              if (camText) camText.textContent = 'Stop Camera';
+
+              html5QrScanner = new Html5Qrcode('qr-camera-stream');
+              await html5QrScanner.start(
+                { facingMode: 'environment' },
+                { fps: 10, qrbox: { width: 200, height: 200 } },
+                (decodedText) => {
+                  handleQrDecode(decodedText);
+                },
+                () => { }
+              );
+            } catch (err) {
+              console.warn('Camera scan failed or permission denied:', err);
+              stopCameraScanner();
+              if (feedback) {
+                feedback.className = 'text-xs p-2.5 rounded-lg bg-surface-container text-on-surface font-medium';
+                feedback.textContent = 'Camera permission required to scan directly. You can upload a photo of the card or enter Health ID below.';
+                feedback.classList.remove('hidden');
+              }
+            }
+          }
+
+          const btnStartCamera = document.getElementById('btn-start-camera');
+          if (btnStartCamera) {
+            btnStartCamera.addEventListener('click', toggleCameraScanner);
+          }
+
+          const btnUploadQrImg = document.getElementById('btn-upload-qr-img');
+          const qrFileInput = document.getElementById('qr-file-input');
+          if (btnUploadQrImg && qrFileInput) {
+            btnUploadQrImg.addEventListener('click', () => qrFileInput.click());
+            qrFileInput.addEventListener('change', async (e) => {
+              const file = e.target.files && e.target.files[0];
+              if (!file) return;
+              const feedback = document.getElementById('qr-scan-feedback');
+              if (feedback) {
+                feedback.className = 'text-xs p-2.5 rounded-lg bg-surface-container text-on-surface font-medium';
+                feedback.textContent = `Analyzing image "${file.name}" for QR code...`;
+                feedback.classList.remove('hidden');
+              }
+
+              if (typeof Html5Qrcode !== 'undefined') {
+                const qr = new Html5Qrcode('qr-camera-stream');
+                try {
+                  const decoded = await qr.scanFile(file, true);
+                  handleQrDecode(decoded);
+                } catch (err) {
+                  if (feedback) {
+                    feedback.className = 'text-xs p-2.5 rounded-lg bg-error-container text-on-error-container font-medium';
+                    feedback.textContent = 'No readable Health ID QR code found in this image. Please ensure good lighting or enter the Health ID manually.';
+                    feedback.classList.remove('hidden');
+                  }
+                }
+              }
+            });
+          }
+
+          if (lookupQrBtn && scanQrInput) {
+            lookupQrBtn.addEventListener('click', () => {
+              handleQrDecode(scanQrInput.value);
+            });
+            scanQrInput.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleQrDecode(scanQrInput.value);
+              }
+            });
+          }
+
+          // When scanner closes, ensure camera is stopped
+          if (closeScannerBtn) {
+            closeScannerBtn.addEventListener('click', () => {
+              stopCameraScanner();
+              hideModal(scanModal, scanModal.firstElementChild);
+            });
+          }
+
+          // Initialize application
+          loadPatients();
+        })();
+      </script>
+      <style>
+        @keyframes scanBeam {
+          0% {
+            top: 10%;
+            opacity: 0.2;
+          }
+
+          50% {
+            top: 85%;
+            opacity: 0.9;
+          }
+
+          100% {
+            top: 10%;
+            opacity: 0.2;
+          }
+        }
+      </style>
+  </main>
+  <footer class="w-full bg-surface-container-low/70 py-12 mt-space-xl border-t border-outline-variant/30">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3"><img alt="AROG Brand Logo" class="h-6 w-auto object-contain opacity-80"
+          src="https://lh3.googleusercontent.com/aida/AEtjO1U52zKU-MZXsGgsqmuhWxEkTatrrqtmtmJuq4FvJ-oQKCunO5xnc5egcngEbP-wMzDa8LHQLCvnfCmaxSWJoCtsWsUYtnctm0WTfnB5-fV3illv9R6m3n7lI15ivGQ4HObxgrMZi7DgzNezoD8cs-EvquLu444iGOxsZ2NHQWz-P9JPZJ-dJScS4f2gtJvoOHpuvUtOpQZS1fUcAc8iWMpopHRXJ5q9E_21o3JpXiYQwQiDZ91-buc3qSE" />
+        <p class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">© 2026 AROG</p>
+      </div>
+      <div class="flex items-center gap-6 text-on-surface-variant select-none">
+        <span class="font-label-sm text-label-sm">Editorial Mission</span>
+        <span class="font-label-sm text-label-sm">Archival Standards</span>
+        <span class="font-label-sm text-label-sm">Privacy Charter</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

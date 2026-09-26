@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en" style="">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="web_standard" name="shell-type">
+  <title>AROG — Healthcare Continuity</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <style>
+    @layer base {
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        overscroll-behavior: none;
+      }
+
+      main>:first-child {
+        margin-top: 0 !important;
+      }
+
+      main>:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script
+    id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-on-surface": "#f8efea", "on-primary": "#ffffff", "on-secondary-fixed-variant": "#3c475a", "surface-dim": "#e1d8d4", "surface-container-highest": "#e9e1dc", "surface-bright": "#fff8f5", "on-primary-container": "#ffcbbd", "on-secondary-container": "#586377", "on-secondary-fixed": "#111c2c", "on-error": "#ffffff", "on-tertiary": "#ffffff", "tertiary": "#52433c", "on-surface-variant": "#53433f", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "secondary": "#545f72", "on-tertiary-fixed-variant": "#53433d", "surface": "#fff8f5", "surface-container": "#f5ece7", "primary-container": "#8d4b38", "surface-variant": "#e9e1dc", "inverse-primary": "#ffb5a0", "on-primary-fixed-variant": "#713524", "on-surface": "#1e1b18", "surface-container-low": "#fbf2ed", "on-primary-fixed": "#390b01", "inverse-surface": "#34302c", "primary-fixed-dim": "#ffb5a0", "on-secondary": "#ffffff", "background": "#fff8f5", "tertiary-fixed": "#f5ded5", "error-container": "#ffdad6", "secondary-fixed": "#d8e3fa", "secondary-container": "#d5e0f7", "on-background": "#1e1b18", "error": "#ba1a1a", "primary": "#703423", "on-tertiary-container": "#e9d2c9", "outline": "#86736e", "surface-tint": "#8e4c39", "secondary-fixed-dim": "#bcc7dd", "on-tertiary-fixed": "#251914", "tertiary-container": "#6a5a53", "primary-fixed": "#ffdbd1", "surface-container-high": "#efe6e2", "tertiary-fixed-dim": "#d8c2b9", "outline-variant": "#d9c2bc" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "space-md": "1rem", "gutter": "1.5rem", "space-lg": "1.75rem", "space-xs": "0.25rem", "margin": "3rem", "space-xl": "2.75rem", "margin-mobile": "1.25rem", "gutter-mobile": "1rem" }, "fontFamily": { "label-sm": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "display-lg-mobile": ["Playfair Display"], "headline-md": ["Playfair Display"], "body-lg": ["Plus Jakarta Sans"], "display-lg": ["Playfair Display"], "body-md": ["Plus Jakarta Sans"], "annotation-sm": ["Caveat"], "annotation-md": ["Caveat"], "title-md": ["Plus Jakarta Sans"], "headline-lg": ["Playfair Display"], "headline-sm": ["Playfair Display"] }, "fontSize": { "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500" }], "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }], "display-lg-mobile": ["34px", { "lineHeight": "42px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "headline-md": ["26px", { "lineHeight": "34px", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }], "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }], "annotation-sm": ["16px", { "lineHeight": "20px", "fontWeight": "400" }], "annotation-md": ["20px", { "lineHeight": "24px", "fontWeight": "500" }], "title-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" }], "headline-sm": ["21px", { "lineHeight": "28px", "fontWeight": "600" }] } } } };</script>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface antialiased">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+    <div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-6">
+      <div class="flex items-center gap-4 shrink-0"><img alt="Brand logo. - Primary color: #8d4b38
+- Font: playfairDisplay
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain"
+          src="https://lh3.googleusercontent.com/aida/AEtjO1UNo3HpPN26UR0mQLlIuT_1x77JtzlKhmeZaeZRIs96YsnuAoCxESCK8hdz2i9nhvSwdJ6AuOm0B0ilErOAmU2lxP6XLgNCPuimsvxkaKo4cFkq3Z6NBZ0ws5ittUGmgW_pVEbHSCsv61FmWbr5hdbJTSKMIsxiz_zFpixCwIqdpZcQa3QW6shqDFHK-A2nE3KXJqsDIWNgKNVOwdDC4M15LkhIFTPasnhkA7VT8U72hyPGT122N6WpRKA">
+        <div class="flex items-baseline gap-2.5"><span
+            class="font-annotation-md text-annotation-md text-tertiary-container hidden sm:inline-block rotate-[-1deg]">Continuity
+            Ledger</span></div>
+      </div>
+      <nav class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low/60 rounded-full"
+        data-active-classes="bg-surface-container text-primary font-semibold rounded-full"><a
+          class="px-3.5 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors rounded-full"
+          data-path="home" href="/frontend/arog_healthcare_continuity_home/code.html">Home</a><a
+          class="px-3.5 py-1.5 font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors rounded-full"
+          data-path="patients" href="/frontend/arog_patients_continuity_records/code.html">Patients</a><a
+          aria-current="page"
+          class="px-3.5 py-1.5 transition-colors bg-surface-container text-primary font-semibold rounded-full"
+          data-path="field-visits" href="/frontend/arog_field_visits_where_care_happened/code.html">Field Visits</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <div id="doctor-profile-badge"
+          class="flex items-center gap-3 pl-3 pr-1.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer" title="Logged in Doctor (Click to Sign Out)">
+          <div class="flex flex-col text-right hidden sm:flex"><span id="nav-doctor-name"
+              class="font-label-lg text-label-lg text-on-surface leading-none">Attending Physician</span><span
+              class="font-label-sm text-label-sm text-on-surface-variant">Travelling Clinician</span></div>
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span
+              class="material-symbols-outlined text-on-primary text-[18px]">person</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="w-full pt-20 bg-surface min-h-[calc(100vh-140px)]">
+    <div class="flex flex-col w-full">
+      <!-- Subtle top accent rule simulating bookbinding -->
+      <div class="w-full h-1 bg-gradient-to-r from-transparent via-primary/25 to-transparent"></div>
+      <section class="max-w-7xl mx-auto w-full px-6 lg:px-12 py-10 lg:py-14">
+        <!-- SUB-HEADER & EDITORIAL INTRO -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8">
+          <div class="relative max-w-2xl">
+            <span class="font-label-sm text-label-sm text-tertiary-container uppercase tracking-[0.22em] block mb-2">
+              Doctor's Expedition Log • Transient Clinical Corridor
+            </span>
+            <h1 class="font-display-lg text-display-lg text-primary tracking-tight leading-none mb-3">
+              Where Care Happened
+            </h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant font-light">
+              Keep track of every place where you've carried care across regional circuits and offline outposts.
+            </p>
+            <!-- Hand-drawn floating script annotation -->
+            <div
+              class="absolute -right-12 sm:-right-28 -top-3 transform rotate-[-3deg] hidden sm:flex items-center gap-2 pointer-events-none select-none">
+              <span class="font-annotation-md text-annotation-md text-primary-container">Your care journey</span>
+              <svg class="w-8 h-8 text-primary-container/80 -scale-y-100 rotate-12" fill="none" stroke="currentColor"
+                stroke-width="1.8" viewBox="0 0 40 40">
+                <path d="M 5,30 C 15,10 25,35 34,14" stroke-dasharray="2 1"></path>
+                <path d="M 28,14 L 35,14 L 34,22" fill="none"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div
+              class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface-container-high/80 text-on-surface">
+              <span class="material-symbols-outlined text-primary text-[19px]">explore</span>
+              <span id="banner-doctor-name" class="font-label-sm text-label-sm tracking-wide text-on-surface">Regional Outreach Circuit</span>
+            </div>
+          </div>
+        </div>
+        <!-- UNDERSTATED SUMMARY ROW (Parchment metric strip) -->
+        <div
+          class="mb-8 p-4 sm:p-5 rounded-xl bg-surface-container-low/70 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-3 sm:gap-6 text-on-surface">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-primary"></span>
+              <span id="field-locations-count"
+                class="font-title-md text-title-md text-on-surface font-semibold">4</span>
+              <span class="font-body-md text-body-md text-on-surface-variant">locations visited</span>
+            </div>
+            <span class="text-outline-variant font-serif">•</span>
+            <div class="flex items-center gap-2">
+              <span id="field-patients-count"
+                class="font-title-md text-title-md text-on-surface font-semibold">73</span>
+              <span class="font-body-md text-body-md text-on-surface-variant">patients seen</span>
+            </div>
+            <span class="text-outline-variant font-serif">•</span>
+            <div class="flex items-center gap-2">
+              <span id="field-new-patients-count"
+                class="font-title-md text-title-md text-on-surface font-semibold">11</span>
+              <span class="font-body-md text-body-md text-on-surface-variant">new patients</span>
+            </div>
+            <span class="text-outline-variant font-serif">•</span>
+            <div class="relative inline-flex items-center gap-2 py-0.5 px-2 rounded bg-tertiary-fixed/60">
+              <span class="font-title-md text-title-md text-primary font-semibold">6</span>
+              <span class="font-body-md text-body-md text-primary font-medium">records need review</span>
+              <!-- Hand-drawn encircled accent -->
+              <svg class="absolute -inset-1 w-[calc(100%+8px)] h-[calc(100%+8px)] pointer-events-none text-primary/40"
+                fill="none" viewBox="0 0 160 40">
+                <ellipse cx="80" cy="20" rx="76" ry="16" stroke="currentColor" stroke-dasharray="140 10 30"
+                  stroke-width="1.2" transform="rotate(-0.8 80 20)"></ellipse>
+              </svg>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-annotation-sm text-annotation-sm text-tertiary">All entries verified via cryptographical
+              ledger</span>
+            <span class="material-symbols-outlined text-outline text-[18px]">verified</span>
+          </div>
+              <!-- MAIN EDITORIAL MAP CANVAS -->
+        <div
+          class="relative w-full rounded-2xl overflow-hidden bg-surface-container-high/40 shadow-sm min-h-[580px] lg:min-h-[640px] flex flex-col justify-between p-6 sm:p-8">
+          <!-- Real Interactive Map Container (Google Maps or Leaflet Fallback) -->
+          <div id="field-visits-map" class="absolute inset-0 z-0 w-full h-full bg-[#fbf2ed]"></div>
+
+          <!-- Subtle vintage cartographic tint overlay (allows map interaction through pointer-events-none) -->
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-surface/20 via-transparent to-surface/30 pointer-events-none z-[1]">
+          </div>
+
+          <!-- Map Marginalia & Decorative Cartography Elements -->
+          <div class="relative z-10 flex items-start justify-between pointer-events-none">
+            <div class="bg-surface-container-lowest/90 backdrop-blur-sm p-4 rounded-xl shadow-sm max-w-xs pointer-events-auto border border-outline-variant/30">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="material-symbols-outlined text-primary text-[18px]">near_me</span>
+                <span id="circuit-route-label" class="font-label-sm text-label-sm text-primary uppercase tracking-wider font-semibold">Doctor Outreach Circuit</span>
+              </div>
+              <p id="circuit-route-desc" class="font-body-md text-body-md text-on-surface">Regional Traveling Care Outposts</p>
+              <div
+                class="mt-2 pt-2 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm border-t border-outline-variant/20">
+                <span id="circuit-date-range">2026 Circuit Log</span>
+                <span id="circuit-active-doc" class="font-semibold text-primary">Active Outposts</span>
+              </div>
+            </div>
+            <!-- Compass Rose & Hand note -->
+            <div class="flex flex-col items-end gap-2 text-right pointer-events-none">
+              <div
+                class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center p-2 text-tertiary-container shadow-sm border border-outline-variant/20">
+                <svg class="w-full h-full text-primary/75" fill="none" stroke="currentColor" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="46" stroke-dasharray="2 2" stroke-width="1"></circle>
+                  <circle cx="50" cy="50" r="42" stroke-width="0.75"></circle>
+                  <polygon fill="currentColor" opacity="0.85" points="50,6 55,45 50,50 45,45"></polygon>
+                  <polygon fill="currentColor" opacity="0.45" points="50,94 55,55 50,50 45,55"></polygon>
+                  <polygon fill="currentColor" opacity="0.45" points="94,50 55,55 50,50 55,45"></polygon>
+                  <polygon fill="currentColor" opacity="0.45" points="6,50 45,55 50,50 45,45"></polygon>
+                  <text fill="currentColor" font-family="serif" font-size="10" text-anchor="middle" x="50" y="20">N</text>
+                </svg>
+              </div>
+              <span class="font-annotation-sm text-annotation-sm text-tertiary hidden sm:block rotate-[2deg]">
+                Cartographic Continuity Map
+              </span>
+            </div>
+          </div>
+
+          <!-- Empty placeholder spacer in middle -->
+          <div class="relative z-0 flex-1 my-auto pointer-events-none"></div>
+
+          <!-- Map Footer Strip -->
+          <div
+            class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-4 border-t border-outline-variant/30 bg-surface-container-lowest/85 backdrop-blur-sm p-3.5 rounded-xl pointer-events-auto shadow-sm">
+            <div class="flex items-center gap-2 text-on-surface-variant">
+              <span class="material-symbols-outlined text-[18px] text-primary">pin_drop</span>
+              <span id="map-status-label" class="font-annotation-sm text-annotation-sm">Click any map station pin to inspect visits and patients treated.</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="btn-recenter-map"
+                class="px-3.5 py-1.5 text-on-surface hover:text-primary font-label-sm text-label-sm bg-surface-container-low hover:bg-surface-container rounded-full transition-colors flex items-center gap-1.5 cursor-pointer"
+                type="button">
+                <span class="material-symbols-outlined text-[16px]">my_location</span>
+                <span>Reset View</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- RECENT FIELD VISITS & VISIT DETAIL SECTION -->
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Column: Recent Field Visits List (5 Columns) -->
+          <div class="lg:col-span-5 flex flex-col gap-4">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-3">
+                <h2 class="font-headline-md text-headline-md text-on-surface">Recent Field Visits</h2>
+                <span id="field-completed-badge"
+                  class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold">
+                  4 Completed
+                </span>
+              </div>
+              <span class="font-annotation-sm text-annotation-sm text-on-surface-variant">Circuit 2026-IV</span>
+            </div>
+            <div id="field-visits-cards-container" class="flex flex-col gap-4">
+              <!-- Visit Card 1 (Active / Nalgonda) -->
+              <div
+                class="p-5 rounded-xl bg-surface-container-lowest shadow-md ring-2 ring-primary/40 relative cursor-pointer hover:bg-surface-bright transition-all">
+                <div class="absolute top-4 right-4 flex items-center gap-1">
+                  <span
+                    class="px-2 py-0.5 rounded text-[10px] font-label-sm font-semibold uppercase bg-tertiary-fixed text-primary">Active
+                    Inspection</span>
+                </div>
+                <div class="flex items-start gap-3.5">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center shrink-0 mt-0.5 text-on-primary-fixed">
+                    <span class="material-symbols-outlined text-[20px]">medical_services</span>
+                  </div>
+                  <div class="flex-1 pr-14">
+                    <div class="flex items-baseline gap-2">
+                      <h3 class="font-headline-sm text-headline-sm text-primary">Nalgonda</h3>
+                      <span class="font-label-sm text-label-sm text-on-surface-variant">18 Aug 2026</span>
+                    </div>
+                    <p class="font-body-md text-body-md text-on-surface-variant mt-1">
+                      Zilla Parishad Primary Health Post • 8.5 hrs
+                    </p>
+                    <div class="mt-3 flex flex-wrap items-center gap-2 pt-2 border-t border-outline-variant/30">
+                      <span class="font-label-sm text-label-sm text-on-surface font-semibold">24 patients</span>
+                      <span class="text-outline-variant">•</span>
+                      <span class="font-label-sm text-label-sm text-primary">6 new intakes</span>
+                      <span class="text-outline-variant">•</span>
+                      <span class="font-label-sm text-label-sm text-tertiary-container">2 reviews pending</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Visit Card 2 (Warangal) -->
+              <div
+                class="p-5 rounded-xl bg-surface-container-low/70 hover:bg-surface-container-lowest hover:shadow-sm transition-all cursor-pointer">
+                <div class="flex items-start gap-3.5">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0 mt-0.5 text-secondary">
+                    <span class="material-symbols-outlined text-[20px]">villa</span>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-baseline justify-between">
+                      <h3 class="font-headline-sm text-headline-sm text-on-surface">Warangal</h3>
+                      <span class="font-label-sm text-label-sm text-on-surface-variant">16 Aug 2026</span>
+                    </div>
+                    <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+                      Sub-Center Matwada • 6 hrs 45 mins
+                    </p>
+                    <div class="mt-2.5 flex items-center gap-2 text-on-surface-variant">
+                      <span class="font-label-sm text-label-sm">18 patients</span>
+                      <span class="text-outline-variant">•</span>
+                      <span class="font-label-sm text-label-sm">3 new patients</span>
+                      <span class="text-outline-variant">•</span>
+                      <span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5">
+                        <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                        Verified
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Visit Card 3 (Karimnagar) -->
+              <div
+                class="p-5 rounded-xl bg-surface-container-low/70 hover:bg-surface-container-lowest hover:shadow-sm transition-all cursor-pointer">
+                <div class="flex items-start gap-3.5">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0 mt-0.5 text-secondary">
+                    <span class="material-symbols-outlined text-[20px]">home_health</span>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-baseline justify-between">
+                      <h3 class="font-headline-sm text-headline-sm text-on-surface">Karimnagar</h3>
+                      <span class="font-label-sm text-label-sm text-on-surface-variant">12 Aug 2026</span>
+                    </div>
+                    <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+                      Mankammathota Outreach Station • 7 hrs 10 mins
+                    </p>
+                    <div class="mt-2.5 flex items-center gap-2 text-on-surface-variant">
+                      <span class="font-label-sm text-label-sm">17 patients</span>
+                      <span class="text-outline-variant">•</span>
+                      <span class="font-label-sm text-label-sm">2 new patients</span>
+                      <span class="text-outline-variant">•</span>
+                      <span class="font-label-sm text-label-sm text-tertiary">Follow-up set</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Visit Card 4 (Khammam) -->
+              <div
+                class="p-5 rounded-xl bg-surface-container-low/70 hover:bg-surface-container-lowest hover:shadow-sm transition-all cursor-pointer">
+                <div class="flex items-start gap-3.5">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0 mt-0.5 text-secondary">
+                    <span class="material-symbols-outlined text-[20px]">local_hospital</span>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-baseline justify-between">
+                      <h3 class="font-headline-sm text-headline-sm text-on-surface">Khammam</h3>
+                      <span class="font-label-sm text-label-sm text-on-surface-variant">08 Aug 2026</span>
+                    </div>
+                    <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+                      Circuit Origin Point • 5 hrs 20 mins
+                    </p>
+                    <div class="mt-2.5 flex items-center gap-2 text-on-surface-variant">
+                      <span class="font-label-sm text-label-sm">14 patients</span>
+                      <span class="text-outline-variant">•</span>
+                      <span class="font-label-sm text-label-sm">Foundational intake</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Right Column: Selected Visit Inspection Folio Page (7 Columns) -->
+          <div class="lg:col-span-7 bg-surface-container-lowest rounded-2xl shadow-sm p-6 sm:p-9 relative">
+            <!-- Archival Journal Header & Stamp -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-start justify-between pb-6 mb-6 border-b border-outline-variant/40 gap-4">
+              <div>
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span id="folio-tag-code"
+                    class="px-2 py-0.5 rounded font-label-sm text-[11px] font-semibold bg-tertiary-fixed text-on-tertiary-fixed uppercase">
+                    Registry Dossier #2026-NLG-04
+                  </span>
+                  <span class="font-annotation-sm text-annotation-sm text-primary">Station Verified</span>
+                </div>
+                <h2 id="folio-location-title" class="font-headline-lg text-headline-lg text-primary tracking-tight">
+                  Field Dispatch: Nalgonda District
+                </h2>
+                <p class="font-body-md text-body-md text-on-surface-variant mt-1">
+                  Care station recorded under the traveling physician regional continuity charter.
+                </p>
+              </div>
+              <!-- Stamped Emblem Motif -->
+              <div
+                class="shrink-0 w-20 h-20 rounded-full border-2 border-dashed border-primary/30 flex flex-col items-center justify-center text-primary/80 transform rotate-6 select-none bg-surface-container-low/40">
+                <span class="font-label-sm text-[8px] tracking-widest uppercase font-bold">AROG FIELD</span>
+                <span id="folio-date-stamp" class="font-headline-sm text-base leading-none font-bold">18 AUG</span>
+                <span class="font-label-sm text-[8px] uppercase tracking-wider">OFFLINE SYNC</span>
+              </div>
+            </div>
+            <!-- Visit Metadata Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-6 mb-6 border-b border-outline-variant/30">
+              <div>
+                <span
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">Date</span>
+                <span id="folio-date-val"
+                  class="font-title-md text-body-lg text-on-surface font-semibold block mt-0.5">18 Aug 2026</span>
+              </div>
+              <div>
+                <span
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">Coordinates</span>
+                <span id="folio-coords-val" class="font-mono text-xs text-primary font-semibold block mt-0.5">17.0575°
+                  N, 79.2684° E</span>
+              </div>
+              <div>
+                <span
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">Operating
+                  Site</span>
+                <span id="folio-site-val" class="font-body-md text-body-md text-on-surface font-medium block mt-0.5">ZP
+                  Primary Health Post</span>
+              </div>
+              <div>
+                <span
+                  class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider block">Outreach
+                  Lead</span>
+                <span id="folio-doctor-val"
+                  class="font-body-md text-body-md text-on-surface font-medium block mt-0.5">Dr. Julian M. Aris</span>
+              </div>
+            </div>
+            <!-- Summary Figures Minimalist Stat Blocks -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+              <div class="p-3.5 rounded-xl bg-surface-container-low flex flex-col">
+                <span id="folio-patients-val"
+                  class="font-display-lg text-headline-lg text-on-surface leading-none font-normal">24</span>
+                <span class="font-label-sm text-label-sm text-on-surface-variant mt-1.5">Patients Seen</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-primary-fixed/40 flex flex-col">
+                <span id="folio-new-patients-val"
+                  class="font-display-lg text-headline-lg text-primary leading-none font-normal">06</span>
+                <span class="font-label-sm text-label-sm text-on-primary-fixed-variant mt-1.5">New Health IDs</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-surface-container-low flex flex-col">
+                <span id="folio-records-val"
+                  class="font-display-lg text-headline-lg text-on-surface leading-none font-normal">18</span>
+                <span class="font-label-sm text-label-sm text-on-surface-variant mt-1.5">Records Updated</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-tertiary-fixed/60 flex flex-col">
+                <span class="font-display-lg text-headline-lg text-primary leading-none font-normal">02</span>
+                <span class="font-label-sm text-label-sm text-primary mt-1.5">Checks Flagged</span>
+              </div>
+            </div>
+            <!-- Dispatch Field Notes (Editorial prose style) -->
+            <div class="mb-8 p-5 rounded-xl bg-surface-container-low/60 relative">
+              <div class="flex items-center justify-between mb-2">
+                <span
+                  class="font-label-sm text-label-sm uppercase tracking-wider text-tertiary-container font-semibold">
+                  Clinical Narrative • Field Notes
+                </span>
+                <span class="font-annotation-sm text-annotation-sm text-tertiary">Transcribed from visit record</span>
+              </div>
+              <p id="folio-narrative-val" class="font-body-lg text-body-lg text-on-surface leading-relaxed italic">
+                “High proportion of seasonal agricultural workers presenting with fatigue and fluctuating blood
+                pressure. Issued portable Health IDs to 6 migrant families with offline NFC emergency tokens. Reconciled
+                2 dual-antihypertensive dosage overlaps across visiting clinic networks before departure.”
+              </p>
+              <div class="mt-3 flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                <span class="font-label-sm text-label-sm text-on-surface-variant">Synchronized with PostgreSQL clinical
+                  archive.</span>
+              </div>
+            </div>
+            <!-- Patients treated by this doctor at this location (Requirement 3) -->
+            <div id="folio-patients-section" class="mb-8 p-5 rounded-xl bg-surface-container-low/80 border border-outline-variant/30">
+              <div class="flex items-center justify-between pb-3 mb-3 border-b border-outline-variant/30">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[20px]">person_check</span>
+                  <h3 id="folio-patients-heading" class="font-headline-sm text-base text-primary font-semibold">
+                    Patients Treated by Dr.
+                  </h3>
+                </div>
+                <span id="folio-patients-badge-count" class="font-label-sm text-xs bg-primary-fixed/50 text-on-primary-fixed px-2.5 py-0.5 rounded-full font-semibold">
+                  0 patients
+                </span>
+              </div>
+              <p class="font-body-md text-xs text-on-surface-variant mb-3">
+                Confidential clinical ledger: patients consulted by the currently authenticated doctor at this station.
+              </p>
+              <div id="folio-patients-container" class="space-y-2">
+                <p class="text-xs text-on-surface-variant italic">Select a visit outpost to view treated patients.</p>
+              </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div
+              class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-4 border-t border-outline-variant/30">
+              <a id="folio-view-patients-btn" class="px-6 py-3 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container transition-all flex items-center justify-center gap-2 shadow-sm"
+                href="/frontend/arog_patients_continuity_records/code.html">
+                <span id="folio-view-patients-text">Open Continuity Folio</span>
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </a>
+              <button id="btn-download-archive" class="px-4 py-2.5 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors font-label-lg text-label-lg flex items-center justify-center gap-2 cursor-pointer"
+                type="button">
+                <span class="material-symbols-outlined text-[18px]">file_download</span>
+                <span>Download Archive PDF</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- VINTAGE FIELD JOURNAL INSPIRATION TIE-IN STRIP -->
+        <div
+          class="mt-14 pt-8 border-t border-outline-variant/30 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="flex items-center gap-4">
+            <!-- Miniature Doctor's Bag representation -->
+            <div
+              class="w-14 h-14 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shrink-0 shadow-inner">
+              <span class="material-symbols-outlined text-[28px]">luggage</span>
+            </div>
+            <div>
+              <h4 class="font-headline-sm text-headline-sm text-on-surface">The Travelling Physician Continuity Protocol
+              </h4>
+              <p class="font-body-md text-body-md text-on-surface-variant">
+                Data saved during field outreach persists encrypted locally and integrates seamlessly into the central
+                patient ledger.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer class="w-full bg-surface-container-low/70 py-12 mt-space-xl border-t border-outline-variant/30">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <span class="font-headline-sm text-headline-sm text-primary">AROG</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+        <p class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">© 2026 AROG</p>
+      </div>
+      <div class="flex items-center gap-6 text-on-surface-variant select-none">
+        <span class="font-label-sm text-label-sm cursor-default">Editorial Mission</span>
+        <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+        <span class="font-label-sm text-label-sm cursor-default">Archival Standards</span>
+        <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+        <span class="font-label-sm text-label-sm cursor-default">Privacy Charter</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/frontend/api.js"></script>
+  <script>
+    let currentVisits = [];
+    let currentMapInstance = null;
+    let currentMarkers = [];
+    let isGoogleMap = false;
+
+    function formatShortDate(dateStr) {
+      if (!dateStr) return 'Unrecorded';
+      try {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function formatStamp(dateStr) {
+      if (!dateStr) return 'DISPATCH';
+      try {
+        const d = new Date(dateStr);
+        const day = d.getDate();
+        const month = d.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+        return `${day} ${month}`;
+      } catch (e) {
+        return 'DISPATCH';
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text).replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+      });
+    }
+
+    function showFolioDetails(visit) {
+      if (!visit) return;
+      const tagEl = document.getElementById('folio-tag-code');
+      const titleEl = document.getElementById('folio-location-title');
+      const stampEl = document.getElementById('folio-date-stamp');
+      const dateEl = document.getElementById('folio-date-val');
+      const coordsEl = document.getElementById('folio-coords-val');
+      const siteEl = document.getElementById('folio-site-val');
+      const docEl = document.getElementById('folio-doctor-val');
+      const ptsEl = document.getElementById('folio-patients-val');
+      const newPtsEl = document.getElementById('folio-new-patients-val');
+      const narrEl = document.getElementById('folio-narrative-val');
+
+      const locName = visit.location_name || visit.location || 'Unknown Station';
+      const visitDate = visit.visited_at || visit.visit_date;
+
+      if (tagEl) tagEl.textContent = `Registry Dossier #PG-${visit.id || 1}`;
+      if (titleEl) titleEl.textContent = `Field Dispatch: ${locName}`;
+      if (stampEl) stampEl.textContent = formatStamp(visitDate);
+      if (dateEl) dateEl.textContent = formatShortDate(visitDate);
+      if (coordsEl) {
+        if (visit.latitude && visit.longitude) {
+          coordsEl.textContent = `${Number(visit.latitude).toFixed(4)}° N, ${Number(visit.longitude).toFixed(4)}° E`;
+        } else {
+          coordsEl.textContent = 'GPS Outpost';
+        }
+      }
+      if (siteEl) siteEl.textContent = locName;
+      if (docEl) docEl.textContent = visit.doctor_name || 'Dr. Attending Physician';
+      if (ptsEl) ptsEl.textContent = visit.patient_count || visit.patients_seen || 1;
+      if (newPtsEl) newPtsEl.textContent = visit.new_patients || 0;
+      if (narrEl) narrEl.textContent = `“${visit.notes || 'Routine consultation documented across traveling clinical circuit.'}”`;
+
+      // Update Treated Patients section (Requirement 3: Only patients treated by current doctor at this location)
+      const headingEl = document.getElementById('folio-patients-heading');
+      const badgeCountEl = document.getElementById('folio-patients-badge-count');
+      const containerEl = document.getElementById('folio-patients-container');
+
+      if (headingEl) {
+        headingEl.textContent = `Patients Treated by ${visit.doctor_name || 'Attending Doctor'}`;
+      }
+
+      const patientDetails = visit.patient_details || [];
+      const patientsTreatedNames = visit.patients_treated || [];
+      const count = Math.max(patientDetails.length, patientsTreatedNames.length, visit.patient_count || 0);
+
+      if (badgeCountEl) {
+        badgeCountEl.textContent = `${count} patient${count === 1 ? '' : 's'}`;
+      }
+
+      if (containerEl) {
+        containerEl.innerHTML = '';
+        if (patientDetails.length > 0) {
+          patientDetails.forEach((p, idx) => {
+            const row = document.createElement('div');
+            row.className = 'flex items-center justify-between p-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/20 hover:bg-surface-bright transition-colors';
+            row.innerHTML = `
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">${idx + 1}</span>
+                <div>
+                  <span class="font-semibold text-sm text-on-surface">${escapeHtml(p.name || 'Patient')}</span>
+                  ${p.health_id ? `<span class="ml-2 font-mono text-[11px] text-primary bg-primary-fixed/40 px-1.5 py-0.5 rounded">${escapeHtml(p.health_id)}</span>` : ''}
+                </div>
+              </div>
+              <span class="text-xs text-on-surface-variant font-medium">${p.visit_date ? formatShortDate(p.visit_date) : 'Encounter Logged'}</span>
+            `;
+            containerEl.appendChild(row);
+          });
+        } else if (patientsTreatedNames.length > 0) {
+          patientsTreatedNames.forEach((name, idx) => {
+            const row = document.createElement('div');
+            row.className = 'flex items-center justify-between p-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/20 hover:bg-surface-bright transition-colors';
+            row.innerHTML = `
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">${idx + 1}</span>
+                <span class="font-semibold text-sm text-on-surface">${escapeHtml(name)}</span>
+              </div>
+              <span class="text-xs text-on-surface-variant font-medium">Station Patient</span>
+            `;
+            containerEl.appendChild(row);
+          });
+        } else {
+          containerEl.innerHTML = `
+            <div class="p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/20 text-xs text-on-surface-variant italic">
+              1 patient record associated with this location.
+            </div>
+          `;
+        }
+      }
+    }
+
+    window.selectFieldVisitLocation = function(locName) {
+      const match = currentVisits.find(v => (v.location_name || v.location) === locName);
+      if (match) {
+        showFolioDetails(match);
+        const section = document.getElementById('folio-patients-section');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    };
+
+    function buildPopupContent(v, docName) {
+      const locName = v.location_name || v.location || 'Outpost Station';
+      const ptsTreated = v.patient_count || (v.patients_treated ? v.patients_treated.length : (v.patients_seen || 1));
+      const lastVisit = formatShortDate(v.visited_at || v.visit_date);
+      const visitsCount = v.visits_count || 1;
+      const doctor = v.doctor_name || docName;
+
+      return `
+        <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 6px 8px; min-width: 210px; color: #1e1b18;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: #703423; border-bottom: 1px solid #d9c2bc; padding-bottom: 4px; margin-bottom: 6px;">
+            ${escapeHtml(locName)}
+          </div>
+          <div style="font-size: 12px; line-height: 1.6; color: #53433f;">
+            <div><strong>Location:</strong> ${escapeHtml(locName)}</div>
+            <div><strong>Patients treated:</strong> ${ptsTreated}</div>
+            <div><strong>Last visit:</strong> ${lastVisit}</div>
+            <div><strong>Doctor:</strong> ${escapeHtml(doctor)}</div>
+            <div><strong>Visits:</strong> ${visitsCount}</div>
+          </div>
+          <button onclick="window.selectFieldVisitLocation('${escapeHtml(locName)}')" style="margin-top: 8px; width: 100%; background: #703423; color: #ffffff; border: none; padding: 6px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; cursor: pointer; text-align: center;">
+            View Location Details →
+          </button>
+        </div>
+      `;
+    }
+
+    async function initMap(visits, docName) {
+      const mapContainer = document.getElementById('field-visits-map');
+      if (!mapContainer) return;
+
+      // Consolidate visits by unique coordinates/location: merge into one pin and increment counts
+      const consolidatedPinsMap = new Map();
+      (visits || []).forEach(v => {
+        if (!v.latitude || !v.longitude) return;
+        const key = `${(v.location_name || v.location || '').trim().toLowerCase()}_${Number(v.latitude).toFixed(4)},${Number(v.longitude).toFixed(4)}`;
+        if (!consolidatedPinsMap.has(key)) {
+          consolidatedPinsMap.set(key, {
+            ...v,
+            patient_count: Number(v.patient_count || v.patients_seen || 1),
+            visits_count: Number(v.visits_count || 1),
+            patients_treated: Array.isArray(v.patients_treated) ? [...v.patients_treated] : [],
+            patient_details: Array.isArray(v.patient_details) ? [...v.patient_details] : []
+          });
+        } else {
+          const existing = consolidatedPinsMap.get(key);
+          existing.patient_count += Number(v.patient_count || v.patients_seen || 1);
+          existing.visits_count += Number(v.visits_count || 1);
+          if (Array.isArray(v.patients_treated)) {
+            v.patients_treated.forEach(p => {
+              if (p && !existing.patients_treated.includes(p)) existing.patients_treated.push(p);
+            });
+          }
+          if (Array.isArray(v.patient_details)) {
+            v.patient_details.forEach(pd => {
+              if (pd && !existing.patient_details.some(x => x.health_id === pd.health_id)) existing.patient_details.push(pd);
+            });
+          }
+        }
+      });
+      const validVisits = Array.from(consolidatedPinsMap.values());
+      const defaultCenter = validVisits.length > 0
+        ? [Number(validVisits[0].latitude), Number(validVisits[0].longitude)]
+        : [17.3850, 78.4867]; // Hyderabad regional default
+
+      let mapConfig = {};
+      try {
+        mapConfig = await AROG_API.getMapConfig();
+      } catch (e) {
+        console.log('No Google Maps configuration or endpoint failed, using Leaflet fallback.');
+      }
+
+      // Check if Google Maps API key is available
+      if (mapConfig && mapConfig.google_maps_api_key) {
+        try {
+          // Listen for Google Maps authentication failure (e.g. invalid key or missing Maps JS API)
+          window.gm_authFailure = function() {
+            console.warn('Google Maps authentication failed with provided key. Rendering AROG vintage cartography fallback.');
+            isGoogleMap = false;
+            const container = document.getElementById('field-visits-map');
+            if (container) {
+              container.innerHTML = '';
+              renderLeafletMap(validVisits, defaultCenter, docName);
+            }
+          };
+
+          await loadGoogleMapsSdk(mapConfig.google_maps_api_key);
+          isGoogleMap = true;
+          renderGoogleMap(validVisits, defaultCenter, docName);
+          return;
+        } catch (err) {
+          console.warn('Google Maps failed to load, falling back to Leaflet:', err);
+        }
+      }
+
+      // Leaflet fallback with warm vintage cartographic aesthetic
+      renderLeafletMap(validVisits, defaultCenter, docName);
+    }
+
+    function loadGoogleMapsSdk(apiKey) {
+      return new Promise((resolve, reject) => {
+        if (window.google && window.google.maps) {
+          return resolve();
+        }
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=geometry`;
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+          if (window.google && window.google.maps) {
+            resolve();
+          } else {
+            reject(new Error('Google Maps object not found after script load'));
+          }
+        };
+        script.onerror = (e) => reject(new Error('Failed to load Google Maps script'));
+        document.head.appendChild(script);
+      });
+    }
+
+    function renderGoogleMap(validVisits, defaultCenter, docName) {
+      try {
+        const container = document.getElementById('field-visits-map');
+        if (!container) return;
+
+        const AROG_MAP_STYLES = [
+          { elementType: "geometry", stylers: [{ color: "#fbf3ec" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#fff8f5" }, { weight: 2 }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#703423" }] },
+          { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#8d4b38" }, { weight: 1.5 }] },
+          { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#713524" }] },
+          { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#e8ded8" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#f0e5dd" }] },
+          { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#d9c2bc" }] },
+          { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#dfcdc6" }] },
+          { featureType: "road.highway", elementType: "geometry.stroke", stylers: [{ color: "#c8b0a9" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#d5dfeb" }] },
+          { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#545f72" }] }
+        ];
+
+        const map = new google.maps.Map(container, {
+          center: { lat: defaultCenter[0], lng: defaultCenter[1] },
+          zoom: validVisits.length > 1 ? 8 : 10,
+          styles: AROG_MAP_STYLES,
+          disableDefaultUI: false,
+          zoomControl: true,
+          mapTypeControl: false,
+          streetViewControl: false
+        });
+        currentMapInstance = map;
+
+        const bounds = new google.maps.LatLngBounds();
+        const infoWindow = new google.maps.InfoWindow();
+
+        validVisits.forEach(v => {
+          const pos = { lat: Number(v.latitude), lng: Number(v.longitude) };
+          bounds.extend(pos);
+
+          const marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: v.location_name || v.location,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: "#703423",
+              fillOpacity: 1,
+              strokeColor: "#ffdbd1",
+              strokeWeight: 2.5,
+              scale: 8
+            }
+          });
+
+          marker.addListener('click', () => {
+            infoWindow.setContent(buildPopupContent(v, docName));
+            infoWindow.open(map, marker);
+            showFolioDetails(v);
+          });
+
+          currentMarkers.push(marker);
+        });
+
+        if (validVisits.length > 1) {
+          map.fitBounds(bounds);
+        }
+
+        document.getElementById('btn-recenter-map')?.addEventListener('click', () => {
+          if (validVisits.length > 1) {
+            map.fitBounds(bounds);
+          } else {
+            map.setCenter({ lat: defaultCenter[0], lng: defaultCenter[1] });
+            map.setZoom(10);
+          }
+        });
+      } catch (err) {
+        console.warn('Google Maps rendering failed:', err);
+        isGoogleMap = false;
+        renderLeafletMap(validVisits, defaultCenter, docName);
+      }
+    }
+
+    function renderLeafletMap(validVisits, defaultCenter, docName) {
+      if (typeof L === 'undefined') {
+        console.error('Leaflet library is not available.');
+        return;
+      }
+
+      const mapContainer = document.getElementById('field-visits-map');
+      if (!mapContainer) return;
+
+      // Clean up existing map instance or leaflet ID if already present
+      if (currentMapInstance) {
+        try {
+          if (typeof currentMapInstance.remove === 'function') {
+            currentMapInstance.remove();
+          }
+        } catch(e) {}
+        currentMapInstance = null;
+      }
+      if (mapContainer._leaflet_id) {
+        mapContainer._leaflet_id = null;
+      }
+
+      const map = L.map('field-visits-map', {
+        zoomControl: true,
+        attributionControl: false
+      }).setView(defaultCenter, validVisits.length > 1 ? 8 : 10);
+      currentMapInstance = map;
+
+      // Standard OpenStreetMap tiles with warm vintage cartographic aesthetic
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Custom terracotta hand-drawn styled DivIcon
+      const terracottaIcon = L.divIcon({
+        className: 'arog-custom-pin',
+        html: `
+          <div style="position: relative; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <div style="position: absolute; inset: -4px; background: rgba(141, 75, 56, 0.25); border-radius: 50%;"></div>
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: #703423; color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.25); border: 2px solid #ffdbd1;">
+              <span class="material-symbols-outlined" style="font-size: 14px;">location_on</span>
+            </div>
+          </div>
+        `,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, -15]
+      });
+
+      const bounds = [];
+      validVisits.forEach(v => {
+        const lat = Number(v.latitude);
+        const lng = Number(v.longitude);
+        bounds.push([lat, lng]);
+
+        const marker = L.marker([lat, lng], { icon: terracottaIcon }).addTo(map);
+        marker.bindPopup(buildPopupContent(v, docName), {
+          className: 'arog-popup-wrap',
+          maxWidth: 260
+        });
+
+        marker.on('click', () => {
+          showFolioDetails(v);
+        });
+
+        currentMarkers.push(marker);
+      });
+
+      if (bounds.length > 1) {
+        map.fitBounds(bounds, { padding: [40, 40] });
+      }
+
+      document.getElementById('btn-recenter-map')?.addEventListener('click', () => {
+        if (bounds.length > 1) {
+          map.fitBounds(bounds, { padding: [40, 40] });
+        } else {
+          map.setView(defaultCenter, 10);
+        }
+      });
+
+      // Ensure full rendering of map tiles
+      setTimeout(() => {
+        try {
+          map.invalidateSize();
+        } catch(e) {}
+      }, 200);
+    }
+
+    (async function initFieldVisits() {
+      // Enforce authentication guard
+      AROG_API.checkAuthGuard();
+
+      // Retrieve authenticated doctor profile
+      let currentUser = null;
+      try {
+        currentUser = await AROG_API.getProfile();
+      } catch (e) {
+        currentUser = AROG_API.getCurrentUser();
+      }
+
+      const rawName = currentUser?.name || currentUser?.full_name || '';
+      const docName = rawName
+        ? (rawName.startsWith('Dr.') ? rawName : `Dr. ${rawName}`)
+        : 'Dr. Attending Physician';
+
+      const navDocEl = document.getElementById('nav-doctor-name');
+      const bannerDocEl = document.getElementById('banner-doctor-name');
+      if (navDocEl) navDocEl.textContent = docName;
+      if (bannerDocEl) bannerDocEl.textContent = `${docName} • Regional Outreach Circuit`;
+
+      // Profile badge logout handler
+      document.getElementById('doctor-profile-badge')?.addEventListener('click', () => {
+        if (confirm(`Logged in as ${docName}. Would you like to sign out?`)) {
+          AROG_API.logout();
+        }
+      });
+
+      // Archive PDF button handler (Requirement 8)
+      document.getElementById('btn-download-archive')?.addEventListener('click', async () => {
+        const btn = document.getElementById('btn-download-archive');
+        const origHtml = btn.innerHTML;
+        try {
+          btn.disabled = true;
+          btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Generating PDF...';
+          await AROG_API.downloadArchivePdf();
+        } catch (err) {
+          alert('Failed to generate Doctor Archive PDF: ' + err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+        }
+      });
+
+      try {
+        // GET /api/field-visits returns ONLY visits performed by the currently logged-in doctor (Requirement 1 & 2)
+        const visits = await AROG_API.getFieldVisits();
+        currentVisits = visits || [];
+
+        const locEl = document.getElementById('field-locations-count');
+        const ptsEl = document.getElementById('field-patients-count');
+        const newEl = document.getElementById('field-new-patients-count');
+        const badgeEl = document.getElementById('field-completed-badge');
+        const container = document.getElementById('field-visits-cards-container');
+
+        if (currentVisits.length === 0) {
+          if (locEl) locEl.textContent = '0';
+          if (ptsEl) ptsEl.textContent = '0';
+          if (newEl) newEl.textContent = '0';
+          if (badgeEl) badgeEl.textContent = '0 Logged';
+          if (container) {
+            container.innerHTML = `
+              <div class="p-8 rounded-xl bg-surface-container-low text-center text-on-surface-variant">
+                <span class="material-symbols-outlined text-4xl text-secondary mb-2 block">explore_off</span>
+                <h4 class="font-headline-sm text-base text-on-surface mb-1">No Field Visits Logged</h4>
+                <p class="font-body-md text-xs text-on-surface-variant leading-relaxed">
+                  Visits performed by ${escapeHtml(docName)} with geolocation enabled will automatically appear here.
+                </p>
+              </div>
+            `;
+          }
+          // Reset right folio view to avoid showing another doctor's mock/default location
+          const tagEl = document.getElementById('folio-tag-code');
+          const titleEl = document.getElementById('folio-location-title');
+          const stampEl = document.getElementById('folio-date-stamp');
+          const dateEl = document.getElementById('folio-date-val');
+          const coordsEl = document.getElementById('folio-coords-val');
+          const siteEl = document.getElementById('folio-site-val');
+          const docEl = document.getElementById('folio-doctor-val');
+          const ptsElFolio = document.getElementById('folio-patients-val');
+          const newPtsEl = document.getElementById('folio-new-patients-val');
+          const narrEl = document.getElementById('folio-narrative-val');
+          const headingEl = document.getElementById('folio-patients-heading');
+          const badgeCountEl = document.getElementById('folio-patients-badge-count');
+          const containerEl = document.getElementById('folio-patients-container');
+
+          if (tagEl) tagEl.textContent = 'Registry Dossier';
+          if (titleEl) titleEl.textContent = 'No Field Stations Recorded';
+          if (stampEl) stampEl.textContent = 'DISPATCH';
+          if (dateEl) dateEl.textContent = '-';
+          if (coordsEl) coordsEl.textContent = 'GPS Outpost';
+          if (siteEl) siteEl.textContent = 'None Recorded';
+          if (docEl) docEl.textContent = docName;
+          if (ptsElFolio) ptsElFolio.textContent = '0';
+          if (newPtsEl) newPtsEl.textContent = '0';
+          if (narrEl) narrEl.textContent = `No field outreach visits recorded yet for ${docName}. Visits recorded with location enabled will appear here.`;
+          if (headingEl) headingEl.textContent = `Patients Treated by ${docName}`;
+          if (badgeCountEl) badgeCountEl.textContent = '0 patients';
+          if (containerEl) containerEl.innerHTML = '<p class="text-xs text-on-surface-variant italic">No patients recorded at this station yet.</p>';
+
+          // Initialize empty map
+          await initMap([], docName);
+          return;
+        }
+
+        // Metrics calculation
+        const uniqueLocations = new Set(currentVisits.map(v => v.location_name || v.location).filter(Boolean));
+        if (locEl) locEl.textContent = uniqueLocations.size;
+        if (badgeEl) badgeEl.textContent = `${currentVisits.length} Logged`;
+
+        const totalPts = currentVisits.reduce((sum, v) => sum + (v.patient_count || v.patients_seen || 1), 0);
+        if (ptsEl) ptsEl.textContent = totalPts;
+
+        const totalNew = currentVisits.reduce((sum, v) => sum + (v.new_patients || 0), 0);
+        if (newEl) newEl.textContent = totalNew;
+
+        // Render Cards List
+        if (container) {
+          container.innerHTML = '';
+          currentVisits.forEach((v, idx) => {
+            const isFirst = idx === 0;
+            const card = document.createElement('div');
+            card.className = `p-5 rounded-xl transition-all cursor-pointer ${isFirst
+                ? 'bg-surface-container-lowest shadow-md ring-2 ring-primary/40 relative hover:bg-surface-bright'
+                : 'bg-surface-container-low/70 hover:bg-surface-container-lowest hover:shadow-sm'
+              }`;
+
+            const locName = v.location_name || v.location || 'Outpost Station';
+            const vDate = v.visited_at || v.visit_date;
+            const ptsCount = v.patient_count || v.patients_seen || 1;
+            const coordsBadge = (v.latitude && v.longitude)
+              ? `<span class="font-mono text-[11px] text-primary bg-primary-fixed/30 px-1.5 py-0.5 rounded">${Number(v.latitude).toFixed(3)}°N, ${Number(v.longitude).toFixed(3)}°E</span>`
+              : '';
+
+            card.innerHTML = `
+              <div class="flex items-start gap-3.5">
+                <div class="w-10 h-10 rounded-lg ${isFirst ? 'bg-primary-fixed text-on-primary-fixed' : 'bg-surface-container-high text-secondary'} flex items-center justify-center shrink-0 mt-0.5">
+                  <span class="material-symbols-outlined text-[20px]">${isFirst ? 'medical_services' : 'local_hospital'}</span>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-baseline justify-between gap-2">
+                    <h3 class="font-headline-sm text-headline-sm ${isFirst ? 'text-primary' : 'text-on-surface'}">${escapeHtml(locName)}</h3>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">${formatShortDate(vDate)}</span>
+                  </div>
+                  <p class="font-body-md text-body-md text-on-surface-variant mt-1 line-clamp-2">${escapeHtml(v.notes || 'Clinical encounter documented.')}</p>
+                  <div class="mt-3 flex flex-wrap items-center gap-2 pt-2 border-t border-outline-variant/30 text-xs text-on-surface-variant">
+                    <span class="font-semibold text-on-surface">${escapeHtml(v.doctor_name || docName)}</span>
+                    <span class="text-outline-variant">•</span>
+                    <span>${ptsCount} patient${ptsCount === 1 ? '' : 's'} treated</span>
+                    ${coordsBadge ? `<span class="text-outline-variant">•</span>${coordsBadge}` : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+
+            card.addEventListener('click', () => {
+              Array.from(container.children).forEach(c => {
+                c.className = 'p-5 rounded-xl bg-surface-container-low/70 hover:bg-surface-container-lowest hover:shadow-sm transition-all cursor-pointer';
+              });
+              card.className = 'p-5 rounded-xl bg-surface-container-lowest shadow-md ring-2 ring-primary/40 relative cursor-pointer hover:bg-surface-bright transition-all';
+              showFolioDetails(v);
+
+              // Center map if coordinates exist
+              if (v.latitude && v.longitude && currentMapInstance) {
+                if (isGoogleMap) {
+                  currentMapInstance.panTo({ lat: Number(v.latitude), lng: Number(v.longitude) });
+                  currentMapInstance.setZoom(11);
+                } else if (typeof currentMapInstance.panTo === 'function') {
+                  currentMapInstance.panTo([Number(v.latitude), Number(v.longitude)]);
+                  currentMapInstance.setZoom(11);
+                }
+              }
+            });
+
+            container.appendChild(card);
+          });
+
+          // Show the first visit details in the folio by default
+          showFolioDetails(currentVisits[0]);
+        }
+
+        // Initialize Map
+        await initMap(currentVisits, docName);
+
+      } catch (e) {
+        console.warn('Could not load field visits from backend:', e);
+      }
+    })();
+  </script>
+</body>
+
+</html>
